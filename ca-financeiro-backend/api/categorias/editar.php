@@ -13,29 +13,25 @@
 
     $authorizationHeader = $headers['Authorization'];
     $token = str_replace('Bearer ', '', $authorizationHeader);
-    $user_id = verificarToken($token);
+    verificarToken($token);
 
-    // Recebe os dados em JSON
+    // Pega dados da requisição
     $data = json_decode(file_get_contents("php://input"), true);
-
-    // Verifica se recebeu os campos necessários
-    if (!isset($data['categoria']) || !isset($data['descricao'])) {
+    if (!isset($data['idCategoria'], $data['categoria'], $data['descricao'])) {
         http_response_code(400);
-        echo json_encode(["erro" => "Campos obrigatórios não enviados."]);
+        echo json_encode(["erro" => "Campos obrigatórios não enviados"]);
         exit;
     }
 
+    $idCategoria = $data['idCategoria'];
     $categoria = $data['categoria'];
     $descricao = $data['descricao'];
 
-    // Insere no banco
     try {
-        $sql = "INSERT INTO categorias (categoria, descricao, saldo) VALUES (?, ?, 0)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$categoria, $descricao]);
-
-        echo json_encode(["mensagem" => "Categoria cadastrada com sucesso!"]);
+        $stmt = $pdo->prepare("UPDATE categorias SET categoria = ?, descricao = ? WHERE idCategoria = ?");
+        $stmt->execute([$categoria, $descricao, $idCategoria]);
+        echo json_encode(["mensagem" => "Categoria atualizada com sucesso"]);
     } catch (PDOException $e) {
         http_response_code(500);
-        echo json_encode(["erro" => "Erro no banco de dados: " . $e->getMessage()]);
+        echo json_encode(["erro" => "Erro ao atualizar categoria"]);
     }
