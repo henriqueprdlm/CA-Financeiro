@@ -1,6 +1,6 @@
 <?php
     header("Content-Type: application/json");
-    require_once '../../config/database.php';
+    require_once __DIR__ . '/../../bootstrap.php';
 
     // Valida se foi passado o idCategoria via parâmetro GET
     if (!isset($_GET['idCategoria'])) {

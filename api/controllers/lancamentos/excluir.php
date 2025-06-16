@@ -1,18 +1,9 @@
 <?php
     header("Content-Type: application/json");
-    require_once '../../config/database.php';
-    require_once '../../auth/validarToken.php';
+    require_once __DIR__ . '/../../bootstrap.php';
 
-    // Validação do token 
-    $headers = apache_request_headers();
-    if (!isset($headers['Authorization'])) {
-        http_response_code(401);
-        echo json_encode(["erro" => "Token não enviado"]);
-        exit;
-    }
-    $authorizationHeader = $headers['Authorization'];
-    $token = str_replace('Bearer ', '', $authorizationHeader);
-    verificarToken($token);
+    // Autenticação
+    $user_id = validarAutenticacao();
 
     $data = json_decode(file_get_contents("php://input"), true);
     if (!isset($data['idLancamento'])) {
