@@ -5,7 +5,7 @@
     $user_id = validarAutenticacao();
 
     // Secret key do Clerk
-    $clerkSecretKey = 'sk_test_vOHXlORRdpsrsH9peNqlxlCEnKZEs2bGE9POcR2e2G';
+    $clerkSecretKey = $_ENV['CLERK_SECRET_KEY'];;
 
     $dados = json_decode(file_get_contents('php://input'), true);
 

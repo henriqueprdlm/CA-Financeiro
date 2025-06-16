@@ -16,7 +16,7 @@
     $email = $data['email'];
 
     // Secret Key do Clerk:
-    $ClerkSecretKey = "sk_test_vOHXlORRdpsrsH9peNqlxlCEnKZEs2bGE9POcR2e2G"; 
+    $ClerkSecretKey = $_ENV['CLERK_SECRET_KEY']; 
 
     $url = "https://api.clerk.com/v1/invitations";
 

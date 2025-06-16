@@ -2,10 +2,10 @@
     require_once __DIR__ . '/../../bootstrap.php';
 
     // Autenticação obrigatória
-    // $user_id = validarAutenticacao();
+    $user_id = validarAutenticacao();
 
     // Chave secreta do Clerk
-    $clerkSecretKey = 'sk_test_vOHXlORRdpsrsH9peNqlxlCEnKZEs2bGE9POcR2e2G';
+    $clerkSecretKey = $_ENV['CLERK_SECRET_KEY'];;
 
     // Consulta à API do Clerk
     $curl = curl_init("https://api.clerk.com/v1/users");
