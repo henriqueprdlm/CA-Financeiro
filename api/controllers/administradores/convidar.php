@@ -3,7 +3,7 @@
     require_once __DIR__ . '/../../bootstrap.php';
 
     // Autenticação
-    // $user_id = validarAutenticacao();
+    $user_id = validarAutenticacao();
 
     $data = json_decode(file_get_contents("php://input"), true);
 
@@ -16,13 +16,13 @@
     $email = $data['email'];
 
     // Secret Key do Clerk:
-    $secretKey = "sk_test_vOHXlORRdpsrsH9peNqlxlCEnKZEs2bGE9POcR2e2G"; 
+    $ClerkSecretKey = "sk_test_vOHXlORRdpsrsH9peNqlxlCEnKZEs2bGE9POcR2e2G"; 
 
     $url = "https://api.clerk.com/v1/invitations";
 
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        "Authorization: Bearer $secretKey",
+        "Authorization: Bearer $ClerkSecretKey",
         "Content-Type: application/json"
     ]);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

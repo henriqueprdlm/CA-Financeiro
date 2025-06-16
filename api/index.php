@@ -25,8 +25,8 @@
         case 'lancamentos':
             require_once 'routes/lancamentos.php';
             break;
-        case 'convites':
-            require_once 'routes/convites.php';
+        case 'administradores':
+            require_once 'routes/administradores.php';
             break;
         default:
             http_response_code(404);
