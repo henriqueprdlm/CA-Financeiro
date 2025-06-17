@@ -4,7 +4,7 @@
     use Firebase\JWT\JWT;
     use Firebase\JWT\Key;
 
-    // Cole sua PUBLIC KEY do Clerk aqui:
+    // PUBLIC KEY do Clerk:
     $publicKey = <<<EOD
     -----BEGIN PUBLIC KEY-----
     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAva0yPkj73NMEeA79us0i
@@ -22,7 +22,6 @@
 
         try {
             $decoded = JWT::decode($token, new Key($publicKey, 'RS256'));
-
             return $decoded->sub; // user_id do Clerk
         } catch (Exception $e) {
             http_response_code(401);
