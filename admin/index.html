@@ -25,7 +25,9 @@
                 window.location.href = "/cafinanceiro/admin/login.html";
             } else {
                 const userButtonDiv = document.getElementById("user-button");
-                Clerk.mountUserButton(userButtonDiv);
+                Clerk.mountUserButton(userButtonDiv, {
+                    afterSignOutUrl: '/cafinanceiro/admin/login.html'
+                });
 
                 const observer = new MutationObserver(() => {
                     if (userButtonDiv) {
