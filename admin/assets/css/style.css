@@ -1,8 +1,127 @@
+:root {
+    --azul-escuro: #173041;
+    --azul-claro: #358fd9;
+    --verde: #28a745;
+    --vermelho: #dc3545;
+}
+
+.poppins-thin {
+  font-family: "Poppins", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.poppins-extralight {
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.poppins-light {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.poppins-regular {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.poppins-medium {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.poppins-semibold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.poppins-bold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.poppins-extrabold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.poppins-black {
+  font-family: "Poppins", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.poppins-thin-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.poppins-extralight-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
+  font-style: italic;
+}
+
+.poppins-light-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.poppins-regular-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.poppins-medium-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.poppins-semibold-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.poppins-bold-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.poppins-extrabold-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: italic;
+}
+
+.poppins-black-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 900;
+  font-style: italic;
+}
+
 * {
-    font-family: sans-serif;
+    font-family: inter, sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: poppins, inter, sans-serif;
 }
 
 body {
@@ -16,83 +135,25 @@ body {
 }
 
 header {
-    background-color: purple;
+    background-color: var(--azul-escuro);
     width: 100%;
-    height: 70px;
     display: flex;
+    flex-direction: row;
     align-items: center;
     color: white;
-    padding: 20px;
-}
+    padding: 0px 20px;
 
-main {
-    & #ca_nome {
-        margin-top: 20px;
-        font-size: 1.5rem;
-    }
-
-    & #ca_curso {
-        font-size: 1.1rem;
-    }
-
-    & .saldo {
-        margin-top: 30px;
+    & a.logo {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
-        justify-content: center;
-
-        & #saldo_texto {
-            position: relative;
-            right: 200px;
-        }
-
-        & #saldo_atual {
-            font-size: 4rem;
-            color: green;
-        }
+        text-decoration: none;
+        color: var(--azul-claro);
     }
-
-    & .categorias {
-        margin: 30px 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-
-        & h3 {
-            align-self: flex-start;
-        }
-
-        & .categoria {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background-color: white;
-            border: 1px solid #fff;
-            border-radius: 8px;
-            margin-top: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s;
-            cursor: pointer;
-
-            & p:last-child {
-                min-width: max-content;
-            }
-
-            &:hover {
-                border: 1px solid purple;
-            }
-        }
-        
-    }
-
 }
 
 footer {
-    background-color: purple;
+    background-color: var(--azul-escuro);
     width: 100%;
     height: 40px;
     display: flex;
@@ -102,3 +163,11 @@ footer {
     padding: 20px;
     font-size: 0.8rem;
 }
+
+
+@media screen and (max-width: 1300px) {
+    .container {
+        max-width: 80vw;
+    } 
+}
+

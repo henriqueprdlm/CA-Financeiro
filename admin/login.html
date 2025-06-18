@@ -29,9 +29,7 @@
                 const userButtonDiv = document.getElementById('user-button')
                 Clerk.mountUserButton(userButtonDiv)
 
-                if (!window.location.pathname.includes('/admin')) {
-                    window.location.href = "/cafinanceiro/admin/index.html";
-                }
+                window.location.href = "/cafinanceiro/admin/index.html";
             } else {
                 document.getElementById('app').innerHTML = `<div id="sign-in"></div>`
                 const signInDiv = document.getElementById('sign-in')

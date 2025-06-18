@@ -4,10 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="assets/css/style.css">
-
-    <title>CA Financeiro</title>
-
     <!-- Verificação de autenticação do usuário -->
     <script
         async
@@ -16,51 +12,69 @@
         src="https://ethical-bluejay-69.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
         type="text/javascript"
     ></script>
+    <script src="assets/js/auth.js"></script>
 
-    <script>
-        window.addEventListener("load", async function () {
-            await Clerk.load();
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/index.css">
 
-            if (!Clerk.user) {
-                window.location.href = "/cafinanceiro/admin/login.html";
-            } else {
-                const userButtonDiv = document.getElementById("user-button");
-                Clerk.mountUserButton(userButtonDiv, {
-                    afterSignOutUrl: '/cafinanceiro/admin/login.html'
-                });
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
-                const observer = new MutationObserver(() => {
-                    if (userButtonDiv) {
-                        const header = document.querySelector("header");
-                        header.style.display = "flex";
-                        header.style.justifyContent = "space-between";
-                        header.style.alignItems = "center";
-                    }
-                });
-                observer.observe(userButtonDiv, { childList: true, subtree: true });
-            }
-        });
-    </script>
+    <title>CA Financeiro - Admin</title>
 </head>
+<div id="modal" class="modal hidden">
+    <div class="modal-content">
+        <h3>Nova Categoria</h3>
+        <form id="form_categoria">
+            <label for="nova-categoria">Nome:</label>
+            <input type="text" id="nova-categoria" name="categoria" required>
+
+            <label for="nova-descricao">Descrição:</label>
+            <input type="text" id="nova-descricao" name="descricao" required>
+
+            <div class="modal-actions">
+                <button type="button" id="cancelar" class="btn btn-cancelar">Cancelar</button>
+                <button type="submit" class="btn btn-salvar">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
 <body>
     <header>
-        <div><h2>CA Financeiro</h2></div>
+        <a href="index.html" class="logo">
+            <img src="assets/img/Logo_Az_Claro.png" alt="Logo do CA Financeiro" style="width: 70px;">
+            <h2>CA Financeiro</h2>
+        </a>
         <div><div id="user-button"></div></div>
     </header>
 
     <main class="container">
-        <h3 id="ca_nome">Centro Acadêmico João Bla bla</h3>
-        <h4 id="ca_curso">Bacharelado em Ciência da Computação - IFC Videira</h4>
-
-        <div class="saldo">
-            <p id="saldo_texto">Saldo atual:</p>
-            <p id="saldo_atual">R$ 0,00</p>
+        <div class="header_detalhes">
+            <div class="ca">
+                <h3 id="ca_nome">Centro Acadêmico João Otávio Oltramari</h3>
+                <p class="ca_curso">Bacharelado em Ciência da Computação</p>
+                <p class="ca_curso">Instituto Federal Catarinense - Campus Videira</p>
+            </div>
+            <div class="saldo">
+                <div class="div_saldo_texto">
+                    <h4 id="saldo_texto">Saldo</h4>
+                </div>
+                <h5 id="saldo_atual">R$ 0,00</h5>
+            </div>
         </div>
 
         <div class="categorias">
-            <h3>Categorias</h3>
+            <div class="categorias_header">
+                <h3>Categorias</h3>
+                <button id="adicionar_categoria" class="btn">
+                    <img src="assets/img/add.png" alt="Adicionar categoria" style="width: 20px;">
+                </button>
+            </div>
 
-            <div class="categoria">
+            <!-- <div class="categoria">
                 <p>Festa Julina 2025Festa Julina 2025Festa Julina 2025Festa Julina 2025Festa Julina 2025Festa Julina 2025</p>
                 <p style="color: green;">R$ 600,00</p>
             </div>
@@ -68,12 +82,106 @@
             <div class="categoria">
                 <p>Viagem do curso 2025</p>
                 <p style="color: red;">-R$ 1200,00</p>
-            </div>
+            </div> -->
         </div>
     </main>
 
     <footer>
         <p>© CA Financeiro, 2025</p>
     </footer>
+
+    <script>
+        // Carregar categorias
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("/cafinanceiro/api/categorias")
+                .then(response => response.json())
+                .then(categorias => {
+                    const container = document.querySelector(".categorias");
+                    const saldoTotalElement = document.getElementById("saldo_atual");
+                    const saldoTotalText = document.getElementById("saldo_texto");
+
+                    let saldoTotal = 0;
+
+                    categorias.forEach(categoria => {
+                        const div = document.createElement("div");
+                        div.classList.add("categoria");
+
+                        const nome = document.createElement("p");
+                        nome.textContent = categoria.categoria;
+
+                        const valor = document.createElement("p");
+                        valor.textContent = formatarMoeda(categoria.saldo);
+                        valor.style.color = categoria.saldo >= 0 ? "var(--verde)" : "var(--vermelho)";
+
+                        div.appendChild(nome);
+                        div.appendChild(valor);
+                        container.appendChild(div);
+
+                        saldoTotal += parseFloat(categoria.saldo);
+                    });
+
+                    saldoTotalElement.textContent = formatarMoeda(saldoTotal);
+                    saldoTotalElement.style.color = saldoTotal >= 0 ? "var(--verde)" : "var(--vermelho)";
+                    saldoTotalText.style.backgroundColor = saldoTotal >= 0 ? "var(--verde)" : "var(--vermelho)";
+                })
+                .catch(error => {
+                    console.error("Erro ao carregar categorias:", error);
+                });
+
+            function formatarMoeda(valor) {
+                return valor.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                });
+            }
+        });
+
+        // Abrir e fechar modal
+        const modal = document.getElementById("modal");
+        const btnAbrir = document.getElementById("adicionar_categoria");
+        const btnCancelar = document.getElementById("cancelar");
+
+        btnAbrir.addEventListener("click", () => {
+            modal.classList.remove("hidden");
+        });
+
+        btnCancelar.addEventListener("click", () => {
+            modal.classList.add("hidden");
+        });
+
+        // Cadastrar nova categoria
+        document.getElementById("form_categoria").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const categoria = document.getElementById("nova-categoria").value.trim();
+            const descricao = document.getElementById("nova-descricao").value.trim();
+
+            // Obtem o token do usuário logado
+            const session = await Clerk.session;
+            const token = await session.getToken();
+
+            fetch("/cafinanceiro/api/categorias", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`  
+                },
+                body: JSON.stringify({ categoria, descricao })
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("Erro ao cadastrar");
+                return res.json();
+            })
+            .then(() => {
+                alert("Categoria cadastrada com sucesso!");
+                location.reload(); // recarrega para atualizar lista e saldo
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Erro ao cadastrar categoria");
+            });
+        });
+
+    </script>
 </body>
 </html>

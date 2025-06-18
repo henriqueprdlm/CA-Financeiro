@@ -1,0 +1,211 @@
+:root {
+    --azul-escuro: #173041;
+    --azul-escuro-hover: #204259;
+    --azul-claro: #358fd9;
+    --verde: #28a745;
+    --verde-hover: #1e8436;
+    --vermelho: #dc3545;
+    --vermelho-hover: #c02c3b;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+
+    & .header_detalhes {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin: 50px 0;
+
+        & .ca {
+            & #ca_nome {
+                margin-top: 20px;
+                margin-bottom: 5px;
+                font-size: 1.5rem;
+            }
+
+            & .ca_curso {
+                font-size: 1rem;
+                color: #666;
+            }
+        }
+
+        & .saldo {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            & .div_saldo_texto {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                align-self: stretch;
+                padding: 15px 0;
+
+                & #saldo_texto {
+                    padding: 0 20px;
+                    margin-right: 20px;
+                    align-self: stretch;
+                    color: white;
+                    border-radius: 8px;
+                    text-align: center;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+            }
+
+            & #saldo_atual {
+                font-size: 4rem;
+            }
+        }
+    }
+
+    & .categorias {
+        margin: 50px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        & .categorias_header {
+            display: flex !important;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+
+            & button#adicionar_categoria {
+                background-color: rgba(0, 0, 0, 0);
+                border-radius: 50%;
+                border: none;
+                cursor: pointer;
+
+                & img {
+                    transition: transform 0.3s ease;
+
+                    &:hover {
+                        transform: scale(1.2);
+                    }
+                }
+            }
+        }
+
+        & .categoria {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: white;
+            border: 1px solid #fff;
+            border-radius: 8px;
+            margin-top: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s;
+
+            & p:last-child {
+                min-width: max-content;
+            }
+
+            &:hover {
+                border: 1px solid var(--azul-escuro);
+                transform: scale(1.015);
+                transition: transform 0.3s ease;
+            }
+        }   
+    }
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+
+    & .modal-content {
+        background: white;
+        padding: 25px;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 400px;
+
+        & h3 {
+            margin-bottom: 15px;
+        }
+
+        & form {
+            display: flex;
+            flex-direction: column;
+
+            & label {
+                font-size: 0.9rem;
+            }
+
+            & input {
+                padding: 7px 10px;
+                margin-bottom: 15px;
+                margin-top: 5px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 0.8rem;
+
+                &:focus {
+                    outline: none;
+                }
+                
+            }
+
+            & .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 1rem;
+
+            & button {
+                border: none;
+                border-radius: 8px;
+                padding: 7px 10px;
+                font-size: 0.8rem;
+                cursor: pointer;
+            }
+
+            & .btn-cancelar {
+                background-color: var(--vermelho);
+                color: white;
+
+                &:hover {
+                    background-color: var(--vermelho-hover);
+                }
+            }
+
+            & .btn-salvar {
+                background-color: #173041;
+                color: white;
+
+                &:hover {
+                    background-color: var(--azul-escuro-hover);
+                }
+            }
+        }
+        }
+    }
+}
+
+.modal.hidden {
+  display: none;
+}
