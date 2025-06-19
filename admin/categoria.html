@@ -45,7 +45,7 @@
             <div class="categoria">
                 <div>
                     <h3 id="categoria_nome"></h3>
-                    <button id="editar_categoria" class="btn">
+                    <button id="editar_categoria" class="btn" onclick="abrirModalEditarCategoria()">
                         <img src="assets/img/edit.png" alt="Editar categoria" style="width: 18px;">
                     </button>
                     <button id="excluir_categoria" class="btn">
@@ -138,20 +138,20 @@
             <h3 id="modal_criar_lancamento_titulo">Adicionar lancamento</h3>
             <form id="form_criar_lancamento">
                 <label for="criar_lancamento_nova_descricao">Descrição:</label>
-                <input type="text" id="criar_lancamento_nova_descricao" class="input_ajustavel" name="descricao" required>
+                <input type="text" id="criar_lancamento_nova_descricao" name="descricao" required>
 
                 <div class="inputs_lado_a_lado">
                     <div>
                         <label for="criar_lancamento_novo_valor">Valor:</label>
                         <div class="input_valor">
                             <p>R$</p>
-                            <input type="number" id="criar_lancamento_novo_valor" class="input_ajustavel" name="valor" required placeholder="X,XX">
+                            <input type="text" id="criar_lancamento_novo_valor" name="valor" required placeholder="X,XX">
                         </div>
                     </div>
                         
                     <div>
                         <label for="criar_lancamento_nova_data">Data:</label>
-                        <input type="date" id="criar_lancamento_nova_data" class="input_ajustavel" name="data" required>
+                        <input type="date" id="criar_lancamento_nova_data" name="data" required>
                     </div>
                 </div>
 
@@ -163,7 +163,17 @@
         </div>
     </div>
 
-   
+   <div id="modal_excluir_lancamento" class="modal hidden">
+        <div class="modal-content">
+            <h3>Deseja excluir este lancamento?</h3>
+            <p></p>
+
+            <div class="modal-actions">
+                <button type="button" id="cancelar_excluir_lancamento" class="btn btn-cancelar">Cancelar</button>
+                <button type="submit" class="btn btn-salvar">Confirmar</button>
+            </div>
+        </div>
+    </div>
 
 
     <script>
@@ -209,6 +219,9 @@
                 const receitasContainer = document.querySelector(".receitas");
                 const despesasContainer = document.querySelector(".despesas");
 
+                let temReceita = false;
+                let temDespesa = false;
+
                 lancamentos.forEach(l => {
                     const div = document.createElement("div");
                     div.classList.add("lancamento");
@@ -226,10 +239,12 @@
                         div.classList.add("receita");
                         valor.style.color = "var(--verde)";
                         receitasContainer.appendChild(div);
+                        temReceita = true;
                     } else {
                         div.classList.add("despesa");
                         valor.style.color = "var(--vermelho)";
                         despesasContainer.appendChild(div);
+                        temDespesa = true;
                     }
 
                     const botoes = document.createElement("div");
@@ -246,7 +261,7 @@
                     const btnExcluir = document.createElement("button");
                     btnExcluir.classList.add("btn");
                     btnExcluir.innerHTML = `<img src="assets/img/delete.png" alt="Excluir lançamento" style="width: 18px;">`;
-                    btnExcluir.onclick = () => excluirLancamento(l.idLancamento);
+                    btnExcluir.onclick = () => mostrarModalExcluirLancamento(l);
                     botoes.appendChild(btnExcluir);
                     
                     div.appendChild(descricao);
@@ -254,6 +269,23 @@
                     div.appendChild(valor);
                     div.appendChild(botoes);
                 });
+
+                if (!temReceita) {
+                    const p = document.createElement("p");
+                    p.textContent = "Não há receitas cadastradas.";
+                    p.style.color = "#888888";
+                    p.style.padding = "20px 0";
+                    receitasContainer.appendChild(p);
+                }
+
+                // Se não tiver despesa, mostra a mensagem
+                if (!temDespesa) {
+                    const p = document.createElement("p");
+                    p.textContent = "Não há despesas cadastradas.";
+                    p.style.color = "#888888";
+                    p.style.padding = "20px 0";
+                    despesasContainer.appendChild(p);
+                }
             } catch (error) {
                 console.error("Erro ao carregar dados da categoria:", error);
                 alert("Erro ao carregar dados da categoria.");
@@ -267,8 +299,10 @@
             }
 
             function formatarData(dataISO) {
-                const data = new Date(dataISO);
-                return data.toLocaleDateString("pt-BR");
+                if (!dataISO) return "";
+                const parteData = dataISO.split("T")[0];
+                const [ano, mes, dia] = parteData.split("-");
+                return `${dia}/${mes}/${ano}`;
             }
         });
 
@@ -312,7 +346,6 @@
             if (resultado.erro) {
                 alert(resultado.erro);
             } else {
-                alert("Categoria atualizada com sucesso!");
                 location.reload();
             }
         });
@@ -346,7 +379,6 @@
             if (data.erro) {
                 alert(data.erro);
             } else {
-                alert("Categoria excluída com sucesso!");
                 window.location.href = "index.html";
             }
         });
@@ -354,8 +386,10 @@
 
         // Criar lançamento
         let tipoLancamento = "receita"; // default
+        let lancamentoEditando = null;
         document.getElementById("criar_receita").addEventListener("click", () => {
             tipoLancamento = "receita";
+            lancamentoEditando = null;
             document.getElementById("modal_criar_lancamento_titulo").textContent = 'Adicionar Receita';
             document.getElementById("form_criar_lancamento").reset();
             document.getElementById("modal_criar_lancamento").classList.remove("hidden");
@@ -363,12 +397,14 @@
 
         document.getElementById("criar_despesa").addEventListener("click", () => {
             tipoLancamento = "despesa";
+            lancamentoEditando = null;
             document.getElementById("modal_criar_lancamento_titulo").textContent = 'Adicionar Despesa';
             document.getElementById("form_criar_lancamento").reset();
             document.getElementById("modal_criar_lancamento").classList.remove("hidden");
         });
 
         document.getElementById("cancelar_criar_lancamento").addEventListener("click", () => {
+            lancamentoEditando = null;
             document.getElementById("modal_criar_lancamento").classList.add("hidden");
         });
 
@@ -376,7 +412,12 @@
             e.preventDefault();
 
             const descricao = document.getElementById("criar_lancamento_nova_descricao").value;
-            const valorBruto = parseFloat(document.getElementById("criar_lancamento_novo_valor").value);
+            const valorStr = document.getElementById("criar_lancamento_novo_valor").value.trim();
+            const valorBruto = parseFloat(valorStr.replace(/\./g, "").replace(",", "."));
+            if (isNaN(valorBruto)) {
+                alert("Valor inválido. Use o formato 1234,56.");
+                return;
+            }
             const data = document.getElementById("criar_lancamento_nova_data").value;
 
             const valor = tipoLancamento === "despesa" ? -Math.abs(valorBruto) : Math.abs(valorBruto);
@@ -385,18 +426,29 @@
             const session = await Clerk.session;
             const token = await session.getToken();
 
-            const res = await fetch("/cafinanceiro/api/lancamentos/criar.php", {
-                method: "POST",
+            let url = "/cafinanceiro/api/lancamentos";
+            let method = "POST";
+            let bodyData = {
+                idCategoria: categoriaAtual.idCategoria,
+                descricao,
+                valor,
+                data
+            };
+
+            if (lancamentoEditando) {
+                // Editando
+                url = "/cafinanceiro/api/lancamentos";
+                method = "PUT";
+                bodyData.idLancamento = lancamentoEditando.idLancamento;
+            }
+
+            const res = await fetch(url, {
+                method,
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify({
-                    idCategoria: categoriaAtual.idCategoria,
-                    descricao,
-                    valor,
-                    data
-                })
+                body: JSON.stringify(bodyData)
             });
 
             const resultado = await res.json();
@@ -404,17 +456,85 @@
             if (resultado.erro) {
                 alert(resultado.erro);
             } else {
-                alert("Lançamento criado com sucesso!");
+                lancamentoEditando = null; // reset após salvar
                 location.reload();
             }
         });
 
 
+        // Editar lançamento (reutilizando o modal de criação)
+        function editarLancamento(lancamento) {
+            lancamentoEditando = lancamento;
 
-        // Editar lançamento
+            document.getElementById("criar_lancamento_nova_descricao").value = lancamento.descricao;
+
+            const valorAbs = Math.abs(lancamento.valor).toFixed(2).replace('.', ',');
+            document.getElementById("criar_lancamento_novo_valor").value = valorAbs;
+
+            document.getElementById("criar_lancamento_nova_data").value = lancamento.data;
+
+            tipoLancamento = lancamento.valor >= 0 ? "receita" : "despesa";
+
+            const titulo = tipoLancamento === "receita" ? "Editar Receita" : "Editar Despesa";
+            document.getElementById("modal_criar_lancamento_titulo").textContent = titulo;
+
+            document.getElementById("modal_criar_lancamento").classList.remove("hidden");
+        }
+
 
         // Excluir lançamento
+        function mostrarModalExcluirLancamento(lancamento) {
+            lancamentoExcluir = lancamento;
 
+            const modal = document.getElementById("modal_excluir_lancamento");
+            const titulo = modal.querySelector("h3");
+            const descricaoParagrafo = modal.querySelector("p");
+
+            const tipo = lancamento.valor >= 0 ? "receita" : "despesa";
+            titulo.textContent = `Deseja excluir esta ${tipo}?`;
+            descricaoParagrafo.textContent = lancamento.descricao;
+
+            modal.classList.remove("hidden");
+        }
+
+        // Cancelar exclusão
+        document.getElementById("cancelar_excluir_lancamento").addEventListener("click", () => {
+            lancamentoExcluir = null;
+            document.getElementById("modal_excluir_lancamento").classList.add("hidden");
+        });
+
+        // Confirmar exclusão
+        document.querySelector("#modal_excluir_lancamento .btn-salvar").addEventListener("click", async () => {
+            if (!lancamentoExcluir) return;
+
+            try {
+                // Obtem o token do usuário logado
+                const session = await Clerk.session;
+                const token = await session.getToken();
+
+                const res = await fetch("/cafinanceiro/api/lancamentos/excluir.php", {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ idLancamento: lancamentoExcluir.idLancamento })
+                });
+
+                const resultado = await res.json();
+
+                if (resultado.erro) {
+                    alert(resultado.erro);
+                } else {
+                    lancamentoExcluir = null;
+                    document.getElementById("modal_excluir_lancamento").classList.add("hidden");
+                    location.reload();
+                }
+            } catch (error) {
+                alert("Erro ao excluir lançamento.");
+                console.error(error);
+            }
+        });
 
     </script>
 

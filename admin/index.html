@@ -109,6 +109,7 @@
                     const saldoTotalText = document.getElementById("saldo_texto");
 
                     let saldoTotal = 0;
+                    let temCategoria = false;
 
                     categorias.forEach(categoria => {
                         const a = document.createElement("a");
@@ -125,9 +126,18 @@
                         a.appendChild(nome);
                         a.appendChild(valor);
                         container.appendChild(a);
+                        temCategoria = true;
 
                         saldoTotal += parseFloat(categoria.saldo);
                     });
+
+                    if (!temCategoria) {
+                        const p = document.createElement("p");
+                        p.textContent = "Não há categorias cadastradas.";
+                        p.style.color = "#888888";
+                        p.style.padding = "20px 0";
+                        container.appendChild(p);
+                    }
 
                     saldoTotalElement.textContent = formatarMoeda(saldoTotal);
                     saldoTotalElement.style.color = saldoTotal >= 0 ? "var(--verde)" : "var(--vermelho)";
@@ -182,7 +192,6 @@
                 return res.json();
             })
             .then(() => {
-                alert("Categoria cadastrada com sucesso!");
                 location.reload();
             })
             .catch(err => {

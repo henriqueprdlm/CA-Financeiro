@@ -1,0 +1,4 @@
+RewriteEngine On
+
+# Redireciona /cafinanceiro para /cafinanceiro/public/index.html
+RewriteRule ^$ public/index.html [L]

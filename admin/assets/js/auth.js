@@ -6,7 +6,7 @@ window.addEventListener("load", async function () {
     } else {
         const userButtonDiv = document.getElementById("user-button");
         Clerk.mountUserButton(userButtonDiv, {
-            afterSignOutUrl: '/cafinanceiro/admin/login.html'
+            afterSignOutUrl: '/cafinanceiro'
         });
 
         const observer = new MutationObserver(() => {
