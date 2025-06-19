@@ -33,6 +33,7 @@ Permite a visualização e controle de categorias e lançamentos financeiros (re
 
 - [XAMPP](https://www.apachefriends.org/index.html) instalado
 - Conta no [Clerk](https://clerk.dev)
+- [Composer](https://getcomposer.org/) instalado
 - Git (opcional)
 
 ### 2. Clone o projeto
@@ -57,7 +58,15 @@ No **phpMyAdmin** ou via terminal MySQL:
 
 Depois, importe o arquivo `CAFinanceiro.sql` que está no projeto com a estrutura das tabelas.
 
-### 4. Configure o arquivo `.env`
+### 4. Instale as dependências
+
+Para instalar as dependências do projeto via Composer, execute:
+
+```bash
+composer install
+```
+
+### 5. Configure o arquivo `.env`
 
 Crie um arquivo `.env` na raiz do projeto com o seguinte conteúdo:
 
@@ -69,7 +78,7 @@ Esse arquivo é usado para autenticar as requisições na API do Clerk, especial
 
 > **⚠️ Nunca envie o arquivo `.env` para o GitHub!** Adicione `.env` no `.gitignore`.
 
-### 5. Inicie o XAMPP
+### 6. Inicie o XAMPP
 
 - Ative o **Apache** e o **MySQL**
 - Acesse o projeto em:  
