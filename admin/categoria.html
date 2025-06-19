@@ -37,7 +37,11 @@
             <img src="assets/img/Logo_Az_Claro.png" alt="Logo do CA Financeiro" style="width: 70px;">
             <h2>CA Financeiro</h2>
         </a>
-        <div><div id="user-button"></div></div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="usuarios.html">Usuários</a>
+            <div id="user-button"></div>
+        </nav>
     </header>
 
     <main class="container">
@@ -222,20 +226,23 @@
                 let temReceita = false;
                 let temDespesa = false;
 
-                lancamentos.forEach(l => {
+                lancamentos.forEach(lancamento => {
                     const div = document.createElement("div");
                     div.classList.add("lancamento");
 
                     const descricao = document.createElement("p");
-                    descricao.textContent = l.descricao;
+                    descricao.textContent = lancamento.descricao;
+                    descricao.classList.add("descricao");
 
                     const data = document.createElement("p");
-                    data.textContent = formatarData(l.data);
+                    data.textContent = formatarData(lancamento.data);
+                    data.classList.add("data");
 
                     const valor = document.createElement("p");
-                    valor.textContent = formatarMoeda(l.valor);
-                    
-                    if (parseFloat(l.valor) >= 0) {
+                    valor.textContent = formatarMoeda(lancamento.valor);
+                    valor.classList.add("valor");
+
+                    if (parseFloat(lancamento.valor) >= 0) {
                         div.classList.add("receita");
                         valor.style.color = "var(--verde)";
                         receitasContainer.appendChild(div);
@@ -254,14 +261,14 @@
                     const btnEditar = document.createElement("button");
                     btnEditar.classList.add("btn");
                     btnEditar.innerHTML = `<img src="assets/img/edit.png" alt="Editar lançamento" style="width: 18px;">`;
-                    btnEditar.onclick = () => editarLancamento(l);
+                    btnEditar.onclick = () => editarLancamento(lancamento);
                     botoes.appendChild(btnEditar);
 
                     // Botão Excluir
                     const btnExcluir = document.createElement("button");
                     btnExcluir.classList.add("btn");
                     btnExcluir.innerHTML = `<img src="assets/img/delete.png" alt="Excluir lançamento" style="width: 18px;">`;
-                    btnExcluir.onclick = () => mostrarModalExcluirLancamento(l);
+                    btnExcluir.onclick = () => mostrarModalExcluirLancamento(lancamento);
                     botoes.appendChild(btnExcluir);
                     
                     div.appendChild(descricao);

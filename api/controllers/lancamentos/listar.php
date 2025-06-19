@@ -15,7 +15,7 @@
         $sql = "SELECT idLancamento, valor, descricao, data 
                 FROM lancamentos 
                 WHERE idCategoria = ?
-                ORDER BY data DESC";
+                ORDER BY data";
                 
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$idCategoria]);

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Verificação de autenticação do usuário -->
+    <script
+        defer
+        crossorigin="anonymous"
+        data-clerk-publishable-key="pk_test_ZXRoaWNhbC1ibHVlamF5LTY5LmNsZXJrLmFjY291bnRzLmRldiQ"
+        src="https://ethical-bluejay-69.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+        type="text/javascript"
+    ></script>
+    <script src="assets/js/auth.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/usuarios.css">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="assets/img/favicon/site.webmanifest">
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <title>CA Financeiro - Admin</title>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <img src="assets/img/Logo_Az_Claro.png" alt="Logo do CA Financeiro" style="width: 70px;">
+            <h2>CA Financeiro</h2>
+        </a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="usuarios.html">Usuários</a>
+            <div id="user-button"></div>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <div class="enviar_convite">
+            <h3>Enviar convite para novo administrador</h3>
+            <form id="form_enviar_convite">
+                <input type="email" id="email_usuario" placeholder="usuario@exemplo.com" required>
+                <button type="submit" class="botao_enviar">
+                    <img src="assets/img/send.png" alt="Enviar convite" style="width: 25px;">
+                </button>
+            </form>
+        </div>
+
+        <div class="usuarios_ativos">
+            <h3>Administradores ativos</h3>
+
+            <div class="loader"></div>
+            <!-- <div class="usuario">
+                <p>Henrique Pieri de Lima</p>
+                <p>henrique070425@gmail.com</p>
+                <button class="botao_excluir">
+                    <img src="assets/img/delete.png" alt="Excluir usuário" style="width: 18px;">
+                </button>
+            </div>
+
+            <div class="usuario">
+                <p>Henrique Pieri de Lima</p>
+                <p>henrique@gmail.com</p>
+                <button class="botao_excluir">
+                    <img src="assets/img/delete.png" alt="Excluir usuário" style="width: 18px;">
+                </button>
+            </div> -->
+        </div>
+    </main>
+
+    <footer>
+        <p>© CA Financeiro, 2025</p>
+    </footer>
+
+    <!-- MODALS -->
+    <div id="modal_excluir_usuario" class="modal hidden">
+        <div class="modal-content">
+            <h3>Deseja remover acesso deste administrador?</h3>
+            <p>Lembre-se que o Centro Acadêmico depende da confiança entre seus integrantes.</p>
+
+            <div class="modal-actions">
+                <button type="button" id="cancelar_excluir_usuario" class="btn btn-cancelar">Cancelar</button>
+                <button type="submit" class="btn btn-salvar">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal_aviso_convite" class="modal hidden">
+        <div class="modal-content">
+            <h3>Convite enviado com sucesso!</h3>
+            <p></p>
+
+            <div class="modal-actions">
+                <button type="button" id="fechar_aviso_convite" class="btn btn-salvar">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enviar convite para novo administrador
+        document.getElementById("form_enviar_convite").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const email = document.getElementById("email_usuario").value;
+
+            // Obtem o token do usuário logado
+            const session = await Clerk.session;
+            const token = await session.getToken();
+
+            const res = await fetch("/cafinanceiro/api/administradores/convidar.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ email })
+            });
+
+            const data = await res.json();
+
+            if (data.erro) {
+                alert(data.erro);
+            } else {
+                document.getElementById("modal_aviso_convite").classList.remove("hidden");
+                document.querySelector("#modal_aviso_convite .modal-content p").textContent = `Convite enviado para ${email}.`;
+                document.getElementById("form_enviar_convite").reset();
+            }
+        });
+
+        document.getElementById("fechar_aviso_convite").addEventListener("click", () => {
+            document.getElementById("modal_aviso_convite").classList.add("hidden");
+        });
+
+        // Carregar usuarios ativos
+        let usuarioParaExcluir = null;
+        document.addEventListener("DOMContentLoaded", function () {
+            window.Clerk.load().then(async () => {
+                const session = await Clerk.session;
+                const token = await session.getToken();
+
+                fetch("/cafinanceiro/api/administradores", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                })
+                    .then(response => response.json())
+                    .then(administradores => {
+                        document.querySelector(".loader").style.display = "none";
+                        const container = document.querySelector(".usuarios_ativos");
+
+                        administradores.forEach(administrador => {
+                            const div = document.createElement("div");
+                            div.classList.add("usuario");
+
+                            const nome = document.createElement("p");
+                            nome.textContent = administrador.nome || "Sem nome";
+                            nome.classList.add("nome");
+
+                            const email = document.createElement("p");
+                            email.textContent = administrador.email;
+                            email.classList.add("email");
+
+                            const botaoExcluir = document.createElement("button");
+                            botaoExcluir.classList.add("botao_excluir");
+                            botaoExcluir.innerHTML = '<img src="assets/img/delete.png" alt="Excluir usuário" style="width: 18px;">';
+                            botaoExcluir.classList.add("botao");
+
+                            botaoExcluir.addEventListener("click", () => {
+                                usuarioParaExcluir = administrador;
+                                document.querySelector("#modal_excluir_usuario .modal-content h3").textContent = `Você tem certeza que deseja remover o acesso de ${administrador.nome}?`;
+                                document.getElementById("modal_excluir_usuario").classList.remove("hidden");
+                            });
+
+                            div.appendChild(nome);
+                            div.appendChild(email);
+                            div.appendChild(botaoExcluir);
+                            container.appendChild(div);
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Erro ao carregar administradores:", error);
+                    });
+
+                    document.getElementById("cancelar_excluir_usuario").addEventListener("click", () => {
+                        document.getElementById("modal_excluir_usuario").classList.add("hidden");
+                    });
+            });
+        });
+
+        // Excluir usuario
+        document.querySelector("#modal_excluir_usuario .btn-salvar").addEventListener("click", async () => {
+            // Obtem o token do usuário logado
+            const session = await Clerk.session;
+            const token = await session.getToken();
+
+            const res = await fetch("/cafinanceiro/api/administradores/excluir.php", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`  
+                },
+                body: JSON.stringify({ user_id: usuarioParaExcluir.user_id })
+            });
+
+            const data = await res.json();
+
+            if (data.erro) {
+                alert(data.erro);
+            } else {
+                window.location.reload();
+            }
+        });
+    </script>
+</body>
+</html>

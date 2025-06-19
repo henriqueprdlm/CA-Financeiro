@@ -13,6 +13,7 @@ main {
         justify-content: space-between;
         align-items: center;
         margin: 50px 0;
+        flex-wrap: wrap;
 
         & .ca {
             & #ca_nome {
@@ -153,7 +154,7 @@ main {
                 margin-bottom: 15px;
                 margin-top: 5px;
                 border: 1px solid #ccc;
-                border-radius: 4px;
+                border-radius: 8px;
                 font-size: 0.8rem;
 
                 &:focus {
@@ -205,4 +206,34 @@ main {
 
 .modal.hidden {
   display: none;
+}
+
+@media screen and (max-width: 1300px) {
+    main {
+        & .header_detalhes {
+            & .saldo {
+                & #saldo_atual {
+                    font-size: 3.5rem;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    main {
+        & .header_detalhes {
+            flex-direction: column;
+            justify-content: center;
+            gap: 30px;
+            & .ca {
+                & #ca_nome {
+                    text-align: center;
+                }
+                & .ca_curso {
+                    text-align: center;
+                }
+            }
+        }
+    }
 }

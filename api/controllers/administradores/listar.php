@@ -32,6 +32,7 @@
     foreach ($usuarios as $usuario) {
         $resultado[] = [
             "user_id" => $usuario['id'],
+            "nome" => $usuario['first_name'] . ' ' . $usuario['last_name'],
             "email" => $usuario['email_addresses'][0]['email_address'] ?? null,
             "status" => $usuario['status'],
             "criado_em" => date('Y-m-d H:i:s', $usuario['created_at'])

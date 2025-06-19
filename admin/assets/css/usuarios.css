@@ -21,66 +21,53 @@ main {
         }
     }
 
-    & .header_detalhes {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
+    & .enviar_convite {
         margin: 50px 0;
 
-        & .categoria {
-            & div {
-                display: flex;
-                flex-direction: row;
-                align-items: baseline;
-                justify-content: start;
-                gap: 8px;
-                
-                & #categoria_nome {
-                    margin-bottom: 5px;
-                    margin-right: 10px;
-                    font-size: 1.5rem;
-                }
-            }
+        & form {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
 
-            & .categoria_descricao {
-                font-size: 1rem;
-                color: #666;
-            }
-        }
-
-        & .saldo {
-            min-width: max-content;
-            margin-left: 20px;
-
-            & #saldo_atual {
-                font-size: 3rem;
-                color: white;
-                padding: 0 15px;
+            & input{
+                padding: 15px;
+                border: 1px solid #ccc;
                 border-radius: 8px;
+                font-size: 1rem;
+                flex: 1;
+
+                &:focus {
+                    outline: none;
+                    border: 1px solid var(--azul-escuro);
+                    transition: border-color 0.3s ease;
+                }
+                
+            }
+
+            & button {
+                padding: 20px;
             }
         }
     }
 
-    & .receitas, .despesas {
+    & .usuarios_ativos {
         margin: 50px 0;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
 
-        & .receitas_header, .despesas_header {
-            display: flex !important;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
+        & h3 {
             width: 100%;
+            text-align: start;
         }
 
-        & .lancamento {
+        & .usuario {
             width: 100%;
             display: grid;
-            grid-template-columns: 1fr 150px 100px 80px; 
+            grid-template-columns: 1fr 1fr 40px; 
             gap: 10px;
             align-items: center;
             padding: 15px;
@@ -90,19 +77,32 @@ main {
             margin-top: 15px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
-            & p:last-child {
-                text-align: right;
+            & p:nth-child(2) {
+                word-break: break-word;
             }
 
-            & .botoes {
-                gap: 10px;
+            & .botao_excluir {
+                text-align: end;
                 display: flex;
-                flex-direction: row;
-                align-items: center;
                 justify-content: end;
+                align-items: center;
             }
         }   
     }
+}
+
+.loader {
+    border: 4px solid #6B8CA2; 
+    border-top: 4px solid #00000000; 
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .modal {
@@ -221,49 +221,25 @@ main {
   display: none;
 }
 
-@media screen and (max-width: 1300px) {
+@media (max-width: 800px) {
     main {
-        & .header_detalhes {
-            & .saldo {
-                & #saldo_atual {
-                    font-size: 2.5rem;
+        & .usuarios_ativos {
+            & .usuario {
+                & .nome {
+                    grid-area: nome;
                 }
-            }
-        }
-    }
-}
-
-@media screen and (max-width: 1000px) {
-    main {
-        & .header_detalhes {
-            flex-direction: column;
-            justify-content: center;
-            gap: 30px;
-        }
-
-        & .receitas, .despesas {
-            & .lancamento {
-                & .descricao {
-                    grid-area: descricao;
+                & .email {
+                    grid-area: email;
                 }
-                & .data {
-                    text-align: center;
-                    grid-area: data;
-                }
-                & .valor {
-                    text-align: center;
-                    grid-area: valor;
-                }
-                & .botoes {
-                    grid-area: botoes;
+                & .botao {
+                    grid-area: botao;
                 }
 
-                grid-template-columns: 3fr 3fr 1fr;
+                grid-template-columns: 6fr 1fr;
                 grid-template-areas: 
-                    "descricao descricao botoes"
-                    "data valor botoes";
+                    "nome botao"
+                    "email botao";
             }
         }
     }
-
 }

@@ -4,7 +4,9 @@
 
     try {
         if (!isset($_GET['idCategoria'])) {
-            $sql = "SELECT idCategoria, categoria, descricao, saldo FROM categorias";
+            $sql = "SELECT idCategoria, categoria, descricao, saldo 
+                FROM categorias
+                ORDER BY idCategoria DESC";
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
 
