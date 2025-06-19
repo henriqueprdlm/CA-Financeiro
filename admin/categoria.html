@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Verificação de autenticação do usuário -->
+    <script
+        async
+        crossorigin="anonymous"
+        data-clerk-publishable-key="pk_test_ZXRoaWNhbC1ibHVlamF5LTY5LmNsZXJrLmFjY291bnRzLmRldiQ"
+        src="https://ethical-bluejay-69.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+        type="text/javascript"
+    ></script>
+    <script src="assets/js/auth.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/categoria.css">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="assets/img/favicon/site.webmanifest">
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <title>CA Financeiro - Admin</title>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <img src="assets/img/Logo_Az_Claro.png" alt="Logo do CA Financeiro" style="width: 70px;">
+            <h2>CA Financeiro</h2>
+        </a>
+        <div><div id="user-button"></div></div>
+    </header>
+
+    <main class="container">
+        <div class="header_detalhes">
+            <div class="categoria">
+                <div>
+                    <h3 id="categoria_nome"></h3>
+                    <button id="editar_categoria" class="btn">
+                        <img src="assets/img/edit.png" alt="Editar categoria" style="width: 18px;">
+                    </button>
+                    <button id="excluir_categoria" class="btn">
+                        <img src="assets/img/delete.png" alt="Excluir categoria" style="width: 18px;">
+                    </button>
+                </div>
+                <p class="categoria_descricao"></p>
+            </div>
+            <div class="saldo">
+                <h5 id="saldo_atual">R$ 0,00</h5>
+            </div>
+        </div>
+
+        <div class="receitas">
+            <div class="receitas_header">
+                <h3 style="color: var(--verde);">Receitas</h3>
+                <button id="criar_receita" class="btn">
+                    <img src="assets/img/add.png" alt="Adicionar receita" style="width: 20px;">
+                </button>
+            </div>
+
+            <!-- <div class="lancamento receita">
+                <p>Festa Julina 2025Festa Julina 2025Festa Julina 2025Festa Julina 2025Festa Julina 2025Festa Julina 2025</p>
+                <p style="color: green;">R$ 600,00</p>
+            </div>
+
+            <div class="lancamento receita">
+                <p>Viagem do curso 2025</p>
+                <p style="color: green;">R$ 1200,00</p>
+            </div> -->
+        </div>
+
+        <div class="despesas">
+            <div class="despesas_header">
+                <h3 style="color: var(--vermelho);">Despesas</h3>
+                <button id="criar_despesa" class="btn">
+                    <img src="assets/img/add.png" alt="Adicionar despesa" style="width: 20px;">
+                </button>
+            </div>
+
+            <!-- <div class="lancamento despesa">
+                <p>Festa Julina 2025Festa Julina 2025Festa Julina 2025Festa Julina 2025Festa Julina 2025Festa Julina 2025</p>
+                <p style="color: red;">-R$ 600,00</p>
+            </div>
+
+            <div class="lancamento despesa">
+                <p>Viagem do curso 2025</p>
+                <p style="color: red;">-R$ 1200,00</p>
+            </div> -->
+        </div>
+    </main>
+
+    <footer>
+        <p>© CA Financeiro, 2025</p>
+    </footer>
+
+    <!-- MODALS -->
+    <div id="modal_editar_categoria" class="modal hidden">
+        <div class="modal-content">
+            <h3>Editar Categoria</h3>
+            <form id="form_editar_categoria">
+                <label for="editar_categoria_nova_categoria">Nome:</label>
+                <input type="text" id="editar_categoria_nova_categoria" class="input_ajustavel" name="categoria" required>
+
+                <label for="editar_categoria_nova_descricao">Descrição:</label>
+                <textarea id="editar_categoria_nova_descricao" class="input_ajustavel" name="descricao"></textarea>
+
+                <div class="modal-actions">
+                    <button type="button" id="cancelar_editar_categoria" class="btn btn-cancelar">Cancelar</button>
+                    <button type="submit" class="btn btn-salvar">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal_excluir_categoria" class="modal hidden">
+        <div class="modal-content">
+            <h3>Deseja excluir esta categoria?</h3>
+            <p>Todos os lancamentos desta categoria serão excluídos também.</p>
+
+            <div class="modal-actions">
+                <button type="button" id="cancelar_excluir_categoria" class="btn btn-cancelar">Cancelar</button>
+                <button type="submit" class="btn btn-salvar">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal_criar_lancamento" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="modal_criar_lancamento_titulo">Adicionar lancamento</h3>
+            <form id="form_criar_lancamento">
+                <label for="criar_lancamento_nova_descricao">Descrição:</label>
+                <input type="text" id="criar_lancamento_nova_descricao" class="input_ajustavel" name="descricao" required>
+
+                <div class="inputs_lado_a_lado">
+                    <div>
+                        <label for="criar_lancamento_novo_valor">Valor:</label>
+                        <div class="input_valor">
+                            <p>R$</p>
+                            <input type="number" id="criar_lancamento_novo_valor" class="input_ajustavel" name="valor" required placeholder="X,XX">
+                        </div>
+                    </div>
+                        
+                    <div>
+                        <label for="criar_lancamento_nova_data">Data:</label>
+                        <input type="date" id="criar_lancamento_nova_data" class="input_ajustavel" name="data" required>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" id="cancelar_criar_lancamento" class="btn btn-cancelar">Cancelar</button>
+                    <button type="submit" class="btn btn-salvar">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+   
+
+
+    <script>
+        let categoriaAtual = null;
+
+        // Carregar dados da categoria e lançamentos
+        document.addEventListener("DOMContentLoaded", async function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const idCategoria = urlParams.get("idCategoria");
+
+            if (!idCategoria) {
+                alert("Categoria não especificada.");
+                window.location.href = "index.html";
+                return;
+            }
+
+            try {
+                // Buscar dados da categoria
+                const resCategoria = await fetch(`/cafinanceiro/api/categorias/listar.php?idCategoria=${idCategoria}`);
+                categoriaAtual = await resCategoria.json();
+                const categoria = categoriaAtual;  
+
+                if (categoria.erro) {
+                    alert(categoria.erro);
+                    window.location.href = "index.html";
+                    return;
+                }
+
+                document.getElementById("categoria_nome").textContent = categoria.categoria;
+                document.querySelector(".categoria_descricao").textContent = categoria.descricao;
+                document.getElementById("saldo_atual").textContent = formatarMoeda(categoria.saldo);
+                document.getElementById("saldo_atual").style.backgroundColor = categoria.saldo >= 0 ? "var(--verde)" : "var(--vermelho)";
+
+                // Buscar lançamentos
+                const resLancamentos = await fetch(`/cafinanceiro/api/lancamentos/listar.php?idCategoria=${idCategoria}`);
+                const lancamentos = await resLancamentos.json();
+
+                if (lancamentos.erro) {
+                    console.error(lancamentos.erro);
+                    return;
+                }
+
+                const receitasContainer = document.querySelector(".receitas");
+                const despesasContainer = document.querySelector(".despesas");
+
+                lancamentos.forEach(l => {
+                    const div = document.createElement("div");
+                    div.classList.add("lancamento");
+
+                    const descricao = document.createElement("p");
+                    descricao.textContent = l.descricao;
+
+                    const data = document.createElement("p");
+                    data.textContent = formatarData(l.data);
+
+                    const valor = document.createElement("p");
+                    valor.textContent = formatarMoeda(l.valor);
+                    
+                    if (parseFloat(l.valor) >= 0) {
+                        div.classList.add("receita");
+                        valor.style.color = "var(--verde)";
+                        receitasContainer.appendChild(div);
+                    } else {
+                        div.classList.add("despesa");
+                        valor.style.color = "var(--vermelho)";
+                        despesasContainer.appendChild(div);
+                    }
+
+                    const botoes = document.createElement("div");
+                    botoes.classList.add("botoes");
+
+                    // Botão Editar
+                    const btnEditar = document.createElement("button");
+                    btnEditar.classList.add("btn");
+                    btnEditar.innerHTML = `<img src="assets/img/edit.png" alt="Editar lançamento" style="width: 18px;">`;
+                    btnEditar.onclick = () => editarLancamento(l);
+                    botoes.appendChild(btnEditar);
+
+                    // Botão Excluir
+                    const btnExcluir = document.createElement("button");
+                    btnExcluir.classList.add("btn");
+                    btnExcluir.innerHTML = `<img src="assets/img/delete.png" alt="Excluir lançamento" style="width: 18px;">`;
+                    btnExcluir.onclick = () => excluirLancamento(l.idLancamento);
+                    botoes.appendChild(btnExcluir);
+                    
+                    div.appendChild(descricao);
+                    div.appendChild(data);
+                    div.appendChild(valor);
+                    div.appendChild(botoes);
+                });
+            } catch (error) {
+                console.error("Erro ao carregar dados da categoria:", error);
+                alert("Erro ao carregar dados da categoria.");
+            }
+
+            function formatarMoeda(valor) {
+                return Number(valor).toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL"
+                });
+            }
+
+            function formatarData(dataISO) {
+                const data = new Date(dataISO);
+                return data.toLocaleDateString("pt-BR");
+            }
+        });
+
+
+        // Editar categoria
+        document.getElementById("editar_categoria").addEventListener("click", () => {
+            document.getElementById("editar_categoria_nova_categoria").value = categoriaAtual.categoria;
+            document.getElementById("editar_categoria_nova_descricao").value = categoriaAtual.descricao;
+            document.getElementById("modal_editar_categoria").classList.remove("hidden");
+        });
+
+        document.getElementById("cancelar_editar_categoria").addEventListener("click", () => {
+            document.getElementById("modal_editar_categoria").classList.add("hidden");
+        });
+
+        document.getElementById("form_editar_categoria").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const nome = document.getElementById("editar_categoria_nova_categoria").value;
+            const descricao = document.getElementById("editar_categoria_nova_descricao").value;
+
+            // Obtem o token do usuário logado
+            const session = await Clerk.session;
+            const token = await session.getToken();
+
+            const res = await fetch("/cafinanceiro/api/categorias/editar.php", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`  
+                },
+                body: JSON.stringify({
+                    idCategoria: categoriaAtual.idCategoria,
+                    categoria: nome,
+                    descricao: descricao
+                })
+            });
+
+            const resultado = await res.json();
+
+            if (resultado.erro) {
+                alert(resultado.erro);
+            } else {
+                alert("Categoria atualizada com sucesso!");
+                location.reload();
+            }
+        });
+
+
+        // Excluir categoria
+        document.getElementById("excluir_categoria").addEventListener("click", () => {
+            document.getElementById("modal_excluir_categoria").classList.remove("hidden");
+        });
+
+        document.getElementById("cancelar_excluir_categoria").addEventListener("click", () => {
+            document.getElementById("modal_excluir_categoria").classList.add("hidden");
+        });
+
+        document.querySelector("#modal_excluir_categoria .btn-salvar").addEventListener("click", async () => {
+            // Obtem o token do usuário logado
+            const session = await Clerk.session;
+            const token = await session.getToken();
+
+            const res = await fetch("/cafinanceiro/api/categorias/excluir.php", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`  
+                },
+                body: JSON.stringify({ idCategoria: categoriaAtual.idCategoria })
+            });
+
+            const data = await res.json();
+
+            if (data.erro) {
+                alert(data.erro);
+            } else {
+                alert("Categoria excluída com sucesso!");
+                window.location.href = "index.html";
+            }
+        });
+
+
+        // Criar lançamento
+        let tipoLancamento = "receita"; // default
+        document.getElementById("criar_receita").addEventListener("click", () => {
+            tipoLancamento = "receita";
+            document.getElementById("modal_criar_lancamento_titulo").textContent = 'Adicionar Receita';
+            document.getElementById("form_criar_lancamento").reset();
+            document.getElementById("modal_criar_lancamento").classList.remove("hidden");
+        });
+
+        document.getElementById("criar_despesa").addEventListener("click", () => {
+            tipoLancamento = "despesa";
+            document.getElementById("modal_criar_lancamento_titulo").textContent = 'Adicionar Despesa';
+            document.getElementById("form_criar_lancamento").reset();
+            document.getElementById("modal_criar_lancamento").classList.remove("hidden");
+        });
+
+        document.getElementById("cancelar_criar_lancamento").addEventListener("click", () => {
+            document.getElementById("modal_criar_lancamento").classList.add("hidden");
+        });
+
+        document.getElementById("form_criar_lancamento").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const descricao = document.getElementById("criar_lancamento_nova_descricao").value;
+            const valorBruto = parseFloat(document.getElementById("criar_lancamento_novo_valor").value);
+            const data = document.getElementById("criar_lancamento_nova_data").value;
+
+            const valor = tipoLancamento === "despesa" ? -Math.abs(valorBruto) : Math.abs(valorBruto);
+
+            // Obtem o token do usuário logado
+            const session = await Clerk.session;
+            const token = await session.getToken();
+
+            const res = await fetch("/cafinanceiro/api/lancamentos/criar.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    idCategoria: categoriaAtual.idCategoria,
+                    descricao,
+                    valor,
+                    data
+                })
+            });
+
+            const resultado = await res.json();
+
+            if (resultado.erro) {
+                alert(resultado.erro);
+            } else {
+                alert("Lançamento criado com sucesso!");
+                location.reload();
+            }
+        });
+
+
+
+        // Editar lançamento
+
+        // Excluir lançamento
+
+
+    </script>
+
+    <script src="assets/js/input.js"></script>
+</body>
+</html>

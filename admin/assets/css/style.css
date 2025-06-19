@@ -1,8 +1,12 @@
 :root {
     --azul-escuro: #173041;
+    --azul-escuro-hover: #204259;
+    --azul-escuro-botoes: #6B8CA2;
     --azul-claro: #358fd9;
     --verde: #28a745;
+    --verde-hover: #1e8436;
     --vermelho: #dc3545;
+    --vermelho-hover: #c02c3b;
 }
 
 .poppins-thin {
@@ -126,6 +130,7 @@ h1, h2, h3, h4, h5, h6 {
 
 body {
     background-color: #f3f3f3;
+    color: var(--azul-escuro);
 }
 
 .container {

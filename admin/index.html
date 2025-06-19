@@ -18,6 +18,12 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/index.css">
 
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="assets/img/favicon/site.webmanifest">
+
     <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,23 +31,6 @@
 
     <title>CA Financeiro - Admin</title>
 </head>
-<div id="modal" class="modal hidden">
-    <div class="modal-content">
-        <h3>Nova Categoria</h3>
-        <form id="form_categoria">
-            <label for="nova-categoria">Nome:</label>
-            <input type="text" id="nova-categoria" name="categoria" required>
-
-            <label for="nova-descricao">Descrição:</label>
-            <input type="text" id="nova-descricao" name="descricao" required>
-
-            <div class="modal-actions">
-                <button type="button" id="cancelar" class="btn btn-cancelar">Cancelar</button>
-                <button type="submit" class="btn btn-salvar">Salvar</button>
-            </div>
-        </form>
-    </div>
-</div>
 <body>
     <header>
         <a href="index.html" class="logo">
@@ -90,6 +79,25 @@
         <p>© CA Financeiro, 2025</p>
     </footer>
 
+    <!-- Modal para adicionar nova categoria -->
+    <div id="modal_criar_categoria" class="modal hidden">
+        <div class="modal-content">
+            <h3>Nova Categoria</h3>
+            <form id="form_criar_categoria">
+                <label for="nova_categoria">Nome:</label>
+                <input type="text" id="nova_categoria" name="categoria" required>
+
+                <label for="nova_descricao">Descrição:</label>
+                <textarea id="nova_descricao" name="descricao" class="input_ajustavel" required></textarea>
+
+                <div class="modal-actions">
+                    <button type="button" id="cancelar" class="btn btn-cancelar">Cancelar</button>
+                    <button type="submit" class="btn btn-salvar">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         // Carregar categorias
         document.addEventListener("DOMContentLoaded", function () {
@@ -103,8 +111,9 @@
                     let saldoTotal = 0;
 
                     categorias.forEach(categoria => {
-                        const div = document.createElement("div");
-                        div.classList.add("categoria");
+                        const a = document.createElement("a");
+                        a.classList.add("categoria");
+                        a.href = `categoria.html?idCategoria=${categoria.idCategoria}`;
 
                         const nome = document.createElement("p");
                         nome.textContent = categoria.categoria;
@@ -113,9 +122,9 @@
                         valor.textContent = formatarMoeda(categoria.saldo);
                         valor.style.color = categoria.saldo >= 0 ? "var(--verde)" : "var(--vermelho)";
 
-                        div.appendChild(nome);
-                        div.appendChild(valor);
-                        container.appendChild(div);
+                        a.appendChild(nome);
+                        a.appendChild(valor);
+                        container.appendChild(a);
 
                         saldoTotal += parseFloat(categoria.saldo);
                     });
@@ -136,8 +145,8 @@
             }
         });
 
-        // Abrir e fechar modal
-        const modal = document.getElementById("modal");
+        // Abrir e fechar modal para criar nova categoria
+        const modal = document.getElementById("modal_criar_categoria");
         const btnAbrir = document.getElementById("adicionar_categoria");
         const btnCancelar = document.getElementById("cancelar");
 
@@ -150,11 +159,11 @@
         });
 
         // Cadastrar nova categoria
-        document.getElementById("form_categoria").addEventListener("submit", async function (e) {
+        document.getElementById("form_criar_categoria").addEventListener("submit", async function (e) {
             e.preventDefault();
 
-            const categoria = document.getElementById("nova-categoria").value.trim();
-            const descricao = document.getElementById("nova-descricao").value.trim();
+            const categoria = document.getElementById("nova_categoria").value.trim();
+            const descricao = document.getElementById("nova_descricao").value.trim();
 
             // Obtem o token do usuário logado
             const session = await Clerk.session;
@@ -174,14 +183,15 @@
             })
             .then(() => {
                 alert("Categoria cadastrada com sucesso!");
-                location.reload(); // recarrega para atualizar lista e saldo
+                location.reload();
             })
             .catch(err => {
                 console.error(err);
                 alert("Erro ao cadastrar categoria");
             });
         });
-
     </script>
+
+    <script src="assets/js/input.js"></script>
 </body>
 </html>

@@ -7,91 +7,81 @@ body {
 main {
     flex: 1;
 
+    & button {
+        background-color: rgba(0, 0, 0, 0);
+        border: none;
+        cursor: pointer;
+
+        & img {
+            transition: transform 0.3s ease;
+
+            &:hover {
+                transform: scale(1.2);
+            }
+        }
+    }
+
     & .header_detalhes {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        align-items: center;
+        align-items: start;
         margin: 50px 0;
 
-        & .ca {
-            & #ca_nome {
-                margin-top: 20px;
-                margin-bottom: 5px;
-                font-size: 1.5rem;
+        & .categoria {
+            & div {
+                display: flex;
+                flex-direction: row;
+                align-items: baseline;
+                justify-content: start;
+                gap: 8px;
+                
+                & #categoria_nome {
+                    margin-bottom: 5px;
+                    margin-right: 10px;
+                    font-size: 1.5rem;
+                }
             }
 
-            & .ca_curso {
+            & .categoria_descricao {
                 font-size: 1rem;
                 color: #666;
             }
         }
 
         & .saldo {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-
-            & .div_saldo_texto {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                align-self: stretch;
-                padding: 15px 0;
-
-                & #saldo_texto {
-                    padding: 0 20px;
-                    margin-right: 20px;
-                    align-self: stretch;
-                    color: white;
-                    border-radius: 8px;
-                    text-align: center;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-            }
+            min-width: max-content;
+            margin-left: 20px;
 
             & #saldo_atual {
-                font-size: 4rem;
+                font-size: 3rem;
+                color: white;
+                padding: 0 15px;
+                border-radius: 8px;
             }
         }
     }
 
-    & .categorias {
+    & .receitas, .despesas {
         margin: 50px 0;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
 
-        & .categorias_header {
+        & .receitas_header, .despesas_header {
             display: flex !important;
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
             width: 100%;
-
-            & button#adicionar_categoria {
-                background-color: rgba(0, 0, 0, 0);
-                border-radius: 50%;
-                border: none;
-                cursor: pointer;
-
-                & img {
-                    transition: transform 0.3s ease;
-
-                    &:hover {
-                        transform: scale(1.2);
-                    }
-                }
-            }
         }
 
-        & .categoria {
+        & .lancamento {
             width: 100%;
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 1fr 150px 100px 80px; 
+            gap: 10px;
             align-items: center;
             padding: 15px;
             background-color: white;
@@ -99,19 +89,17 @@ main {
             border-radius: 8px;
             margin-top: 15px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: transform 0.3s;
-            text-decoration: none;
-            color: var(--azul-escuro);
 
             & p:last-child {
-                min-width: max-content;
+                text-align: right;
             }
 
-            &:hover {
-                border: 1px solid var(--azul-escuro);
-                transform: scale(1.015);
-                transition: transform 0.3s ease;
+            & .botoes {
+                gap: 10px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: end;
             }
         }   
     }
@@ -149,25 +137,52 @@ main {
             }
 
             & input, textarea {
-                padding: 7px 10px;
+                padding: 9px 10px;
                 margin-bottom: 15px;
                 margin-top: 5px;
                 border: 1px solid #ccc;
                 border-radius: 4px;
                 font-size: 0.8rem;
+                height: 35px;
 
                 &:focus {
                     outline: none;
                 }
                 
             }
-            
+
             & textarea {
                 resize: none;
                 overflow-y: hidden;
             }
 
-            & .modal-actions {
+            & .input_valor {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 5px;
+
+                & p {
+                    padding: 7px 0;
+                    margin-bottom: 15px;
+                    margin-top: 5px;
+                    font-size: 0.9rem;
+                }
+            }
+
+            & .inputs_lado_a_lado {
+                display: grid;
+                grid-template-columns: 1fr 1fr; 
+                gap: 15px;
+                align-items: center;
+
+                & input {
+                    width: 100%;
+                }
+            }
+        }
+
+        & .modal-actions {
             display: flex;
             justify-content: flex-end;
             gap: 10px;
@@ -198,7 +213,6 @@ main {
                     background-color: var(--azul-escuro-hover);
                 }
             }
-        }
         }
     }
 }
