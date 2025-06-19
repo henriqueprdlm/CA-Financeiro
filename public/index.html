@@ -4,41 +4,119 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/index.css">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="assets/img/favicon/site.webmanifest">
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
     <title>CA Financeiro</title>
 </head>
 <body>
     <header>
-        <h2>CA Financeiro</h2>
+        <a href="index.html" class="logo">
+            <img src="assets/img/Logo_Az_Claro.png" alt="Logo do CA Financeiro" style="width: 70px;">
+            <h2>CA Financeiro</h2>
+        </a>
+        <nav>
+            <div id="user-button"></div>
+        </nav>
     </header>
 
     <main class="container">
-        <h3 id="ca_nome">Centro Acadêmico João Bla bla</h3>
-        <h4 id="ca_curso">Bacharelado em Ciência da Computação - IFC Videira</h4>
-
-        <div class="saldo">
-            <p id="saldo_texto">Saldo atual:</p>
-            <p id="saldo_atual">R$ 0,00</p>
+        <div class="header_detalhes">
+            <div class="ca">
+                <h3 id="ca_nome">Centro Acadêmico João Otávio Oltramari</h3>
+                <p class="ca_curso">Bacharelado em Ciência da Computação</p>
+                <p class="ca_curso">Instituto Federal Catarinense - Campus Videira</p>
+            </div>
+            <div class="saldo">
+                <div class="div_saldo_texto">
+                    <h4 id="saldo_texto">Saldo</h4>
+                </div>
+                <h5 id="saldo_atual">R$ 0,00</h5>
+            </div>
         </div>
 
         <div class="categorias">
-            <h3>Categorias</h3>
-
-            <div class="categoria">
-                <p>Festa Julina 2025Festa Julina 2025Festa Julina 2025Festa Julina 2025Festa Julina 2025Festa Julina 2025</p>
-                <p style="color: green;">R$ 600,00</p>
+            <div class="categorias_header">
+                <h3>Categorias</h3>
             </div>
 
-            <div class="categoria">
-                <p>Viagem do curso 2025</p>
-                <p style="color: red;">-R$ 1200,00</p>
-            </div>
         </div>
     </main>
 
     <footer>
         <p>© CA Financeiro, 2025</p>
+        <a href="./admin">Acessar como administrador</a>
     </footer>
+
+    <script>
+        // Carregar categorias
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("/cafinanceiro/api/categorias")
+                .then(response => response.json())
+                .then(categorias => {
+                    const container = document.querySelector(".categorias");
+                    const saldoTotalElement = document.getElementById("saldo_atual");
+                    const saldoTotalText = document.getElementById("saldo_texto");
+
+                    let saldoTotal = 0;
+                    let temCategoria = false;
+
+                    categorias.forEach(categoria => {
+                        const a = document.createElement("a");
+                        a.classList.add("categoria");
+                        a.href = `categoria.html?idCategoria=${categoria.idCategoria}`;
+
+                        const nome = document.createElement("p");
+                        nome.textContent = categoria.categoria;
+
+                        const valor = document.createElement("p");
+                        valor.textContent = formatarMoeda(categoria.saldo);
+                        valor.style.color = categoria.saldo >= 0 ? "var(--verde)" : "var(--vermelho)";
+
+                        a.appendChild(nome);
+                        a.appendChild(valor);
+                        container.appendChild(a);
+                        temCategoria = true;
+
+                        saldoTotal += parseFloat(categoria.saldo);
+                    });
+
+                    if (!temCategoria) {
+                        const p = document.createElement("p");
+                        p.textContent = "Não há categorias cadastradas.";
+                        p.style.color = "#888888";
+                        p.style.padding = "20px 0";
+                        container.appendChild(p);
+                    }
+
+                    saldoTotalElement.textContent = formatarMoeda(saldoTotal);
+                    saldoTotalElement.style.color = saldoTotal >= 0 ? "var(--verde)" : "var(--vermelho)";
+                    saldoTotalText.style.backgroundColor = saldoTotal >= 0 ? "var(--verde)" : "var(--vermelho)";
+                })
+                .catch(error => {
+                    console.error("Erro ao carregar categorias:", error);
+                });
+
+            function formatarMoeda(valor) {
+                return valor.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                });
+            }
+        });
+
+    </script>
 </body>
 </html>

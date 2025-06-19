@@ -80,7 +80,7 @@ main {
         & .lancamento {
             width: 100%;
             display: grid;
-            grid-template-columns: 1fr 150px 100px 80px; 
+            grid-template-columns: 1fr 150px 100px; 
             gap: 10px;
             align-items: center;
             padding: 15px;
@@ -89,136 +89,8 @@ main {
             border-radius: 8px;
             margin-top: 15px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-
-            & p:last-child {
-                text-align: right;
-            }
-
-            & .botoes {
-                gap: 10px;
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: end;
-            }
         }   
     }
-}
-
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-
-    & .modal-content {
-        background: white;
-        padding: 25px;
-        border-radius: 8px;
-        width: 90%;
-        max-width: 400px;
-
-        & h3 {
-            margin-bottom: 15px;
-        }
-
-        & form {
-            display: flex;
-            flex-direction: column;
-
-            & label {
-                font-size: 0.9rem;
-            }
-
-            & input, textarea {
-                padding: 9px 10px;
-                margin-bottom: 15px;
-                margin-top: 5px;
-                border: 1px solid #ccc;
-                border-radius: 8px;
-                font-size: 0.8rem;
-                height: 35px;
-
-                &:focus {
-                    outline: none;
-                }
-                
-            }
-
-            & textarea {
-                resize: none;
-                overflow-y: hidden;
-            }
-
-            & .input_valor {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                gap: 5px;
-
-                & p {
-                    padding: 7px 0;
-                    margin-bottom: 15px;
-                    margin-top: 5px;
-                    font-size: 0.9rem;
-                }
-            }
-
-            & .inputs_lado_a_lado {
-                display: grid;
-                grid-template-columns: 1fr 1fr; 
-                gap: 15px;
-                align-items: center;
-
-                & input {
-                    width: 100%;
-                }
-            }
-        }
-
-        & .modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 1rem;
-
-            & button {
-                border: none;
-                border-radius: 8px;
-                padding: 7px 10px;
-                font-size: 0.8rem;
-                cursor: pointer;
-            }
-
-            & .btn-cancelar {
-                background-color: var(--vermelho);
-                color: white;
-
-                &:hover {
-                    background-color: var(--vermelho-hover);
-                }
-            }
-
-            & .btn-salvar {
-                background-color: #173041;
-                color: white;
-
-                &:hover {
-                    background-color: var(--azul-escuro-hover);
-                }
-            }
-        }
-    }
-}
-
-.modal.hidden {
-  display: none;
 }
 
 @media screen and (max-width: 1300px) {
@@ -239,7 +111,7 @@ main {
             flex-direction: column;
             justify-content: center;
             gap: 30px;
-            
+
             & .categoria {     
                 & div {
                     & #categoria_nome  {
@@ -266,14 +138,11 @@ main {
                     text-align: center;
                     grid-area: valor;
                 }
-                & .botoes {
-                    grid-area: botoes;
-                }
 
-                grid-template-columns: 3fr 3fr 1fr;
+                grid-template-columns: 3fr 3fr;
                 grid-template-areas: 
-                    "descricao descricao botoes"
-                    "data valor botoes";
+                    "descricao descricao"
+                    "data valor";
             }
         }
     }

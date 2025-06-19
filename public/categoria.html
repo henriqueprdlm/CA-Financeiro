@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/categoria.css">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="assets/img/favicon/site.webmanifest">
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <title>CA Financeiro</title>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <img src="assets/img/Logo_Az_Claro.png" alt="Logo do CA Financeiro" style="width: 70px;">
+            <h2>CA Financeiro</h2>
+        </a>
+        <nav>
+            <div id="user-button"></div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="header_detalhes">
+            <div class="categoria">
+                <div>
+                    <h3 id="categoria_nome"></h3>
+                </div>
+                <p class="categoria_descricao"></p>
+            </div>
+            <div class="saldo">
+                <h5 id="saldo_atual">R$ 0,00</h5>
+            </div>
+        </div>
+
+        <div class="receitas">
+            <div class="receitas_header">
+                <h3 style="color: var(--verde);">Receitas</h3>
+            </div>
+        </div>
+
+        <div class="despesas">
+            <div class="despesas_header">
+                <h3 style="color: var(--vermelho);">Despesas</h3>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>© CA Financeiro, 2025</p>
+        <a href="./admin">Acessar como administrador</a>
+    </footer>
+
+    <script>
+        // Carregar dados da categoria e lançamentos
+        document.addEventListener("DOMContentLoaded", async function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const idCategoria = urlParams.get("idCategoria");
+
+            if (!idCategoria) {
+                alert("Categoria não especificada.");
+                window.location.href = "index.html";
+                return;
+            }
+
+            try {
+                // Buscar dados da categoria
+                const resCategoria = await fetch(`/cafinanceiro/api/categorias/listar.php?idCategoria=${idCategoria}`);
+                categoriaAtual = await resCategoria.json();
+                const categoria = categoriaAtual;  
+
+                if (categoria.erro) {
+                    alert(categoria.erro);
+                    window.location.href = "index.html";
+                    return;
+                }
+
+                document.getElementById("categoria_nome").textContent = categoria.categoria;
+                document.querySelector(".categoria_descricao").textContent = categoria.descricao;
+                document.getElementById("saldo_atual").textContent = formatarMoeda(categoria.saldo);
+                document.getElementById("saldo_atual").style.backgroundColor = categoria.saldo >= 0 ? "var(--verde)" : "var(--vermelho)";
+
+                // Buscar lançamentos
+                const resLancamentos = await fetch(`/cafinanceiro/api/lancamentos/listar.php?idCategoria=${idCategoria}`);
+                const lancamentos = await resLancamentos.json();
+
+                if (lancamentos.erro) {
+                    console.error(lancamentos.erro);
+                    return;
+                }
+
+                const receitasContainer = document.querySelector(".receitas");
+                const despesasContainer = document.querySelector(".despesas");
+
+                let temReceita = false;
+                let temDespesa = false;
+
+                lancamentos.forEach(lancamento => {
+                    const div = document.createElement("div");
+                    div.classList.add("lancamento");
+
+                    const descricao = document.createElement("p");
+                    descricao.textContent = lancamento.descricao;
+                    descricao.classList.add("descricao");
+
+                    const data = document.createElement("p");
+                    data.textContent = formatarData(lancamento.data);
+                    data.classList.add("data");
+
+                    const valor = document.createElement("p");
+                    valor.textContent = formatarMoeda(lancamento.valor);
+                    valor.classList.add("valor");
+
+                    if (parseFloat(lancamento.valor) >= 0) {
+                        div.classList.add("receita");
+                        valor.style.color = "var(--verde)";
+                        receitasContainer.appendChild(div);
+                        temReceita = true;
+                    } else {
+                        div.classList.add("despesa");
+                        valor.style.color = "var(--vermelho)";
+                        despesasContainer.appendChild(div);
+                        temDespesa = true;
+                    }
+                    
+                    div.appendChild(descricao);
+                    div.appendChild(data);
+                    div.appendChild(valor);
+                });
+
+                if (!temReceita) {
+                    const p = document.createElement("p");
+                    p.textContent = "Não há receitas cadastradas.";
+                    p.style.color = "#888888";
+                    p.style.padding = "20px 0";
+                    receitasContainer.appendChild(p);
+                }
+
+                if (!temDespesa) {
+                    const p = document.createElement("p");
+                    p.textContent = "Não há despesas cadastradas.";
+                    p.style.color = "#888888";
+                    p.style.padding = "20px 0";
+                    despesasContainer.appendChild(p);
+                }
+            } catch (error) {
+                console.error("Erro ao carregar dados da categoria:", error);
+                alert("Erro ao carregar dados da categoria.");
+            }
+
+            function formatarMoeda(valor) {
+                return Number(valor).toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL"
+                });
+            }
+
+            function formatarData(dataISO) {
+                if (!dataISO) return "";
+                const parteData = dataISO.split("T")[0];
+                const [ano, mes, dia] = parteData.split("-");
+                return `${dia}/${mes}/${ano}`;
+            }
+        });
+    </script>
+</body>
+</html>
