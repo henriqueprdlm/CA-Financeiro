@@ -10,7 +10,7 @@ Permite a visualização e controle de categorias e lançamentos financeiros (re
 - **Frontend:** HTML, CSS, JavaScript
 - **Backend:** PHP (API REST)
 - **Banco de Dados:** MySQL
-- **Autenticação:** [Clerk](https://clerk.dev/)
+- **Autenticação:** Clerk
 - **Ambiente de desenvolvimento:** XAMPP
 - **Documentação da API:** Postman
 
