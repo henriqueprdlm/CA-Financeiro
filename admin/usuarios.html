@@ -34,7 +34,7 @@
 <body>
     <header>
         <a href="index.html" class="logo">
-            <img src="assets/img/Logo_Az_Claro.png" alt="Logo do CA Financeiro" style="width: 70px;">
+            <img src="assets/img/Logo_Az_Claro.png" alt="Logo do CA Financeiro">
             <h2>CA Financeiro</h2>
         </a>
         <nav>
@@ -211,7 +211,7 @@
             const session = await Clerk.session;
             const token = await session.getToken();
 
-            const res = await fetch("/cafinanceiro/api/administradores/excluir.php", {
+            const res = await fetch("/cafinanceiro/api/administradores", {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",

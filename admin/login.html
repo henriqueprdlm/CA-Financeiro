@@ -3,6 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Verificação de autenticação do usuário -->
+    <script
+        async
+        crossorigin="anonymous"
+        data-clerk-publishable-key="pk_test_ZXRoaWNhbC1ibHVlamF5LTY5LmNsZXJrLmFjY291bnRzLmRldiQ"
+        src="https://ethical-bluejay-69.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+        type="text/javascript"
+    ></script>
 
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon/apple-touch-icon.png">
@@ -18,31 +27,23 @@
 <body>
     <div id="app"></div>
 
-    <script
-        async
-        crossorigin="anonymous"
-        data-clerk-publishable-key="pk_test_ZXRoaWNhbC1ibHVlamF5LTY5LmNsZXJrLmFjY291bnRzLmRldiQ"
-        src="https://ethical-bluejay-69.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
-        type="text/javascript"
-    ></script>
-
     <script>
         window.addEventListener('load', async function () {
-            
-            await Clerk.load()
+            const response = await fetch('assets/locales/clerk-ptBR.json');
+            const ptBR = await response.json();
+    
+            await Clerk.load({ localization: ptBR })
 
             if (Clerk.user) {
-                document.getElementById('app').innerHTML = `<div id="user-button"></div>`
-                const userButtonDiv = document.getElementById('user-button')
-                Clerk.mountUserButton(userButtonDiv)
-
-                window.location.href = "/cafinanceiro/admin/index.html";
+              document.getElementById('app').innerHTML = `<div id="user-button"></div>`;
+              Clerk.mountUserButton(document.getElementById('user-button'), { localization: ptBR });
+              window.location.href = "/cafinanceiro/admin/index.html";
             } else {
-                document.getElementById('app').innerHTML = `<div id="sign-in"></div>`
-                const signInDiv = document.getElementById('sign-in')
-                Clerk.mountSignIn(signInDiv, {
-                    redirectUrl: "/cafinanceiro/admin/index.html"
-                })
+              document.getElementById('app').innerHTML = `<div id="sign-in"></div>`;
+              Clerk.mountSignIn(document.getElementById('sign-in'), {
+                redirectUrl: "/cafinanceiro/admin/index.html",
+                localization: ptBR,
+              });
             }
         })
     </script>

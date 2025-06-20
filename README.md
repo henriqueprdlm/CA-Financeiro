@@ -12,6 +12,7 @@ Permite a visualização e controle de categorias e lançamentos financeiros (re
 - **Banco de Dados:** MySQL
 - **Autenticação:** [Clerk](https://clerk.dev/)
 - **Ambiente de desenvolvimento:** XAMPP
+- **Documentação da API:** Postman
 
 ---
 
@@ -77,7 +78,7 @@ CLERK_SECRET_KEY=insira-sua-clerk-secret-key-aqui
 
 Esse arquivo é usado para autenticar as requisições na API do Clerk, especialmente nas rotas protegidas.
 
-Para saber mais sobre a API, [aqui está o link da documentação] (https://documenter.getpostman.com/view/45854706/2sB2x6nsn6).
+Para saber mais sobre a API, [aqui está o link da documentação](https://documenter.getpostman.com/view/45854706/2sB2x6nsn6).
 
 > **Nunca envie o arquivo `.env` para o GitHub!** Adicione `.env` no `.gitignore`.
 

@@ -114,6 +114,7 @@ main {
 
             & .categoria {     
                 & div {
+                    justify-content: center;
                     & #categoria_nome  {
                         text-align: center;
                         margin-right: 0;
@@ -147,4 +148,58 @@ main {
         }
     }
 
+}
+
+
+@media screen and (max-width: 525px) {
+    main {
+        & .header_detalhes {
+            margin: 20px 0;
+            & .saldo {
+                & #saldo_atual {
+                    font-size: 2.5rem;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 400px) {
+    main {
+        & .header_detalhes {
+            & .categoria {
+                & div #categoria_nome {
+                    font-size: 1.3rem;
+                }
+            }
+            & .saldo {
+                & #saldo_atual {
+                    font-size: 2rem;
+                }
+            }
+        }
+
+        & .receitas, .despesas {
+            & .lancamento {
+                font-size: 0.85rem;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 350px) {
+    main {
+        & .header_detalhes {
+            & .categoria {
+                & div #categoria_nome {
+                    font-size: 1.2rem;
+                }
+            }
+            & .saldo {
+                & #saldo_atual {
+                    font-size: 1.5rem;
+                }
+            }
+        }
+    }
 }

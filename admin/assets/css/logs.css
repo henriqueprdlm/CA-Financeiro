@@ -94,3 +94,22 @@ main {
         }
     }
 }
+
+@media screen and (max-width: 525px) {
+    main {
+        & .logs {
+            margin: 20px 0;
+
+            & .tabela_responsiva {
+                & .logs_tabela {
+                    & th {
+                        font-size: 0.85rem;
+                    }
+                    & td {
+                        font-size: 0.75rem; 
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,1373 @@
+{
+	"info": {
+		"_postman_id": "b511c5a9-b838-459b-9d6f-110093dfd443",
+		"name": "CA-Financeiro",
+		"description": "A API do sistema CA Financeiro oferece recursos para gerenciamento completo das categorias e lançamentos financeiros, além do controle de acesso administrativo. Os endpoints de categorias permitem listar, criar, editar e excluir classificações. Já os endpoints de lançamentos possibilitam cadastrar, consultar, atualizar e remover registros financeiros (despesas ou receitas) vinculados às categorias. Para garantir a segurança da área administrativa, a API inclui endpoints para gerenciamento de administradores, permitindo listar os usuários com acesso, enviar convites para novos administradores via e-mail e remover acessos quando necessário. Todas as operações que modificam dados exigem autenticação via token JWT para assegurar o controle de acesso apropriado e a integridade das informações, também são registrados logs para todas as alterações feitas.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45854706",
+		"_collection_link": "https://henriquepieridelima.postman.co/workspace/Henrique-Pieri-de-Lima's-Worksp~0a0904eb-8e19-40a4-821d-1f5b9c3412b7/collection/45854706-b511c5a9-b838-459b-9d6f-110093dfd443?action=share&source=collection_link&creator=45854706"
+	},
+	"item": [
+		{
+			"name": "Categorias - Criar",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"categoria\": \"Festa Julina\",\n    \"descricao\": \"Arrecadação da festa de 2025\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/categorias",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"categorias"
+					]
+				},
+				"description": "Cria uma nova categoria financeira para o sistema CA Financeiro. Cada categoria representa um tópico onde o Centro Acadêmico pode registrar receitas ou despesas, com um saldo inicial zerado."
+			},
+			"response": [
+				{
+					"name": "Ex - Categorias - Criar",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"categoria\": \"Festa Julina\",\n    \"descricao\": \"Arrecadação da festa de 2025\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/cafinanceiro/api/categorias/criar.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"cafinanceiro",
+								"api",
+								"categorias",
+								"criar.php"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 15 Jun 2025 18:59:58 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/8.2.4"
+						},
+						{
+							"key": "Content-Length",
+							"value": "48"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"mensagem\": \"Categoria cadastrada com sucesso!\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Categorias - Listar",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/categorias",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"categorias"
+					],
+					"query": [
+						{
+							"key": "idCategoria",
+							"value": "{{int}}",
+							"description": "Buscar categoria pelo seu id",
+							"disabled": true
+						}
+					]
+				},
+				"description": "Retorna a lista de todas as categorias financeiras cadastradas no sistema, com seus respectivos saldos e descrições."
+			},
+			"response": [
+				{
+					"name": "Ex - Categorias - Listar",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost/cafinanceiro/api/categorias/listar.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"cafinanceiro",
+								"api",
+								"categorias",
+								"listar.php"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 15 Jun 2025 19:13:55 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/8.2.4"
+						},
+						{
+							"key": "Content-Length",
+							"value": "270"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"idCategoria\": 1,\n        \"categoria\": \"Festa Julina\",\n        \"descricao\": \"Arrecadação da festa julina de 2025, onde vendemos crepe.\",\n        \"saldo\": 1000\n    },\n    {\n        \"idCategoria\": 2,\n        \"categoria\": \"FICE 2025\",\n        \"descricao\": \"Arrecadação da FICE em 2025 onde vendemos bebidas.\",\n        \"saldo\": 500\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Categorias - Editar",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"idCategoria\": 1,\n  \"categoria\": \"Nova Festa Julina\",\n  \"descricao\": \"Atualização teste\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/categorias",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"categorias"
+					]
+				},
+				"description": "Atualiza os dados de uma categoria financeira existente, como o nome e a descrição."
+			},
+			"response": [
+				{
+					"name": "Ex - Categorias - Editar",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"idCategoria\": 1,\n  \"categoria\": \"Nova Festa Julina\",\n  \"descricao\": \"Atualização teste\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/cafinanceiro/api/categorias/editar.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"cafinanceiro",
+								"api",
+								"categorias",
+								"editar.php"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 15 Jun 2025 19:01:30 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/8.2.4"
+						},
+						{
+							"key": "Content-Length",
+							"value": "47"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"mensagem\": \"Categoria atualizada com sucesso\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Categorias - Excluir",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"idCategoria\": 1\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/categorias",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"categorias"
+					]
+				},
+				"description": "Exclui uma categoria existente do sistema, informando seu ID."
+			},
+			"response": [
+				{
+					"name": "Categorias - Excluir",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"idCategoria\": 1\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/cafinanceiro/api/categorias/excluir.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"cafinanceiro",
+								"api",
+								"categorias",
+								"excluir.php"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 15 Jun 2025 19:01:52 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/8.2.4"
+						},
+						{
+							"key": "Content-Length",
+							"value": "70"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"mensagem\": \"Categoria e lançamentos excluídos com sucesso\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Lançamentos - Criar",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"idCategoria\": 1,\n  \"valor\": 500,\n  \"descricao\": \"Arrecadação via PIX\",\n  \"data\": \"2025-06-15\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/lancamentos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"lancamentos"
+					]
+				},
+				"description": "Adiciona um lançamento financeiro (despesa ou receita) a uma categoria específica."
+			},
+			"response": [
+				{
+					"name": "Ex - Lançamentos - Criar",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"idCategoria\": 1,\n  \"valor\": 500,\n  \"descricao\": \"Arrecadação via PIX\",\n  \"data\": \"2025-06-15\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/cafinanceiro/api/lancamentos/criar.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"cafinanceiro",
+								"api",
+								"lancamentos",
+								"criar.php"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 15 Jun 2025 19:03:36 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/8.2.4"
+						},
+						{
+							"key": "Content-Length",
+							"value": "54"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"mensagem\": \"Lançamento cadastrado com sucesso!\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Lançamentos - Listar",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/lancamentos?idCategoria=1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"lancamentos"
+					],
+					"query": [
+						{
+							"key": "idCategoria",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Retorna todos os lançamentos financeiros de uma categoria específica."
+			},
+			"response": [
+				{
+					"name": "Lançamentos - Listar",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost/cafinanceiro/api/lancamentos/listar.php?idCategoria=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"cafinanceiro",
+								"api",
+								"lancamentos",
+								"listar.php"
+							],
+							"query": [
+								{
+									"key": "idCategoria",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 15 Jun 2025 19:14:24 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/8.2.4"
+						},
+						{
+							"key": "Content-Length",
+							"value": "526"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Invalid Date"
+						}
+					],
+					"body": "[\n    {\n        \"idLancamento\": 3,\n        \"valor\": 500,\n        \"descricao\": \"Arrecadação via PIX\",\n        \"data\": \"2025-06-15\"\n    },\n    {\n        \"idLancamento\": 4,\n        \"valor\": 205.94999999999998863131622783839702606201171875,\n        \"descricao\": \"Arrecadação em dinheiro.\",\n        \"data\": \"2025-06-15\"\n    },\n    {\n        \"idLancamento\": 1,\n        \"valor\": -251.229999999999989768184605054557323455810546875,\n        \"descricao\": \"Compras: farinha, leite e ovos.\",\n        \"data\": \"2025-06-10\"\n    },\n    {\n        \"idLancamento\": 2,\n        \"valor\": -304.8999999999999772626324556767940521240234375,\n        \"descricao\": \"Compras: presunto e chocolate.\",\n        \"data\": \"2025-06-09\"\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Lançamentos - Editar",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"idLancamento\": 1,\n  \"idCategoria\": 1,\n  \"valor\": 150.75,\n  \"descricao\": \"Atualização de lançamento de teste\",\n  \"data\": \"2025-06-15\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/lancamentos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"lancamentos"
+					]
+				},
+				"description": "Atualiza um lançamento financeiro existente, podendo alterar categoria, valor, descrição e data."
+			},
+			"response": [
+				{
+					"name": "Ex - Lançamentos - Editar",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"idLancamento\": 1,\n  \"idCategoria\": 1,\n  \"valor\": 150.75,\n  \"descricao\": \"Atualização de lançamento de teste\",\n  \"data\": \"2025-06-15\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/cafinanceiro/api/lancamentos/editar.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"cafinanceiro",
+								"api",
+								"lancamentos",
+								"editar.php"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 15 Jun 2025 19:04:09 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/8.2.4"
+						},
+						{
+							"key": "Content-Length",
+							"value": "53"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"mensagem\": \"Lançamento atualizado com sucesso\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Lançamentos - Excluir",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"idLancamento\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/lancamentos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"lancamentos"
+					]
+				},
+				"description": "Exclui um lançamento financeiro existente, ajustando o saldo da categoria correspondente."
+			},
+			"response": [
+				{
+					"name": "Ex - Lançamentos - Excluir",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"idLancamento\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/cafinanceiro/api/lancamentos/excluir.php",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"cafinanceiro",
+								"api",
+								"lancamentos",
+								"excluir.php"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sun, 15 Jun 2025 19:04:25 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/8.2.4"
+						},
+						{
+							"key": "Content-Length",
+							"value": "56"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"mensagem\": \"Lançamento excluído com sucesso\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Administradores - Convidar",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n  \"email\": \"your_email+clerk_test@example.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/administradores",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"administradores"
+					]
+				},
+				"description": "Envia um convite para o e-mail informado. O convidado poderá se cadastrar como administrador."
+			},
+			"response": [
+				{
+					"name": "Ex - Administradores - Convidar",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\n{\n  \"email\": \"your_email+clerk_test@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/cafinanceiro/api/convites",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"cafinanceiro",
+								"api",
+								"convites"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Mon, 16 Jun 2025 17:24:39 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/8.2.4"
+						},
+						{
+							"key": "Content-Length",
+							"value": "58"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"sucesso\": true,\n    \"mensagem\": \"Convite enviado com sucesso.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Administradores - Listar",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/administradores",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"administradores"
+					]
+				},
+				"description": "Retorna uma lista de todos os usuários cadastrados como administradores do sistema."
+			},
+			"response": [
+				{
+					"name": "Ex - Administradores - Listar",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/cafinanceiro/api/administradores",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"cafinanceiro",
+								"api",
+								"administradores"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Thu, 19 Jun 2025 20:35:51 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/8.2.4"
+						},
+						{
+							"key": "Content-Length",
+							"value": "165"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"user_id\": \"user_123abc\",\n        \"nome\": \"User Example\",\n        \"email\": \"your_email+clerk_test@example.com\",\n        \"status\": null,\n        \"criado_em\": \"57423-11-15 19:34:52\"\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Administradores - Remover",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"user_id\": \"user_123abc\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/administradores",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"administradores"
+					]
+				},
+				"description": "Remove um usuário administrador do sistema, com base no seu `user_id`."
+			},
+			"response": [
+				{
+					"name": "Ex - Administradores - Remover",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\n{\n  \"user_id\": \"user_123abc\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/administradores",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"administradores"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Mon, 16 Jun 2025 17:46:48 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/8.2.4"
+						},
+						{
+							"key": "Content-Length",
+							"value": "48"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"mensagem\": \"Usuário removido com sucesso\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Logs - Listar",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{clerkSecretKey}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/logs",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"logs"
+					]
+				},
+				"description": "Retorna uma lista de todos os logs de alterações feitas pelos administradores no sistema.\n\nA chave \"entidade\" pode ser: Categoria, Lançamento ou Usuário.  \nA chave \"acao\" pode ser: Criação, Edição, Exclusão ou Convite."
+			},
+			"response": [
+				{
+					"name": "Ex - Logs - Listar",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/logs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"logs"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 20 Jun 2025 04:04:18 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/8.2.4"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1247"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"idLog\": 3,\n        \"idUsuario\": \"user_123abc\",\n        \"nomeUsuario\": \"User Example\",\n        \"emailUsuario\": \"your_email+clerk_test@example.com\",\n        \"entidade\": \"Lançamento\",\n        \"acao\": \"Exclusão\",\n        \"descricao\": \"Excluiu lançamento (ID: 46) na categoria TesteCategoria (ID: 10):\\ndescrição: Teste editar lançamento, valor: 3.21, data: 2025-06-17\",\n        \"dataHora\": \"2025-06-20 01:01:14\"\n    },\n    {\n        \"idLog\": 2,\n        \"idUsuario\": \"user_123abc\",\n        \"nomeUsuario\": \"User Example\",\n        \"emailUsuario\": \"your_email+clerk_test@example.com\",\n        \"entidade\": \"Lançamento\",\n        \"acao\": \"Edição\",\n        \"descricao\": \"Editou lançamento na categoria TesteCategoria (ID: 10):\\nANTES -> descrição: 'Teste criar lançamento', valor: 1.23, data: 2025-06-16;\\nDEPOIS -> descrição: 'Teste editar lançamento', valor: 3.21, data: 2025-06-17\",\n        \"dataHora\": \"2025-06-20 01:01:00\"\n    },\n    {\n        \"idLog\": 1,\n        \"idUsuario\": \"user_123abc\",\n        \"nomeUsuario\": \"User Example\",\n        \"emailUsuario\": \"your_email+clerk_test@example.com\",\n        \"entidade\": \"Lançamento\",\n        \"acao\": \"Criação\",\n        \"descricao\": \"Criou lançamento 'Teste criar lançamento' na categoria: TesteCategoria (ID: 10):\\nvalor: 1.23, data: 2025-06-16\",\n        \"dataHora\": \"2025-06-20 01:00:48\"\n    }\n]"
+				}
+			]
+		}
+	]
+}

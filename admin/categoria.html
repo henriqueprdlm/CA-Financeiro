@@ -34,7 +34,7 @@
 <body>
     <header>
         <a href="index.html" class="logo">
-            <img src="assets/img/Logo_Az_Claro.png" alt="Logo do CA Financeiro" style="width: 70px;">
+            <img src="assets/img/Logo_Az_Claro.png" alt="Logo do CA Financeiro">
             <h2>CA Financeiro</h2>
         </a>
         <nav>
@@ -197,7 +197,7 @@
 
             try {
                 // Buscar dados da categoria
-                const resCategoria = await fetch(`/cafinanceiro/api/categorias/listar.php?idCategoria=${idCategoria}`);
+                const resCategoria = await fetch(`/cafinanceiro/api/categorias?idCategoria=${idCategoria}`);
                 categoriaAtual = await resCategoria.json();
                 const categoria = categoriaAtual;  
 
@@ -335,7 +335,7 @@
             const session = await Clerk.session;
             const token = await session.getToken();
 
-            const res = await fetch("/cafinanceiro/api/categorias/editar.php", {
+            const res = await fetch("/cafinanceiro/api/categorias", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -372,7 +372,7 @@
             const session = await Clerk.session;
             const token = await session.getToken();
 
-            const res = await fetch("/cafinanceiro/api/categorias/excluir.php", {
+            const res = await fetch("/cafinanceiro/api/categorias", {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -394,6 +394,7 @@
         // Criar lançamento
         let tipoLancamento = "receita"; // default
         let lancamentoEditando = null;
+        
         document.getElementById("criar_receita").addEventListener("click", () => {
             tipoLancamento = "receita";
             lancamentoEditando = null;
@@ -519,7 +520,7 @@
                 const session = await Clerk.session;
                 const token = await session.getToken();
 
-                const res = await fetch("/cafinanceiro/api/lancamentos/excluir.php", {
+                const res = await fetch("/cafinanceiro/api/lancamentos", {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",

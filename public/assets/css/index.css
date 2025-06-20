@@ -132,3 +132,59 @@ main {
         }
     }
 }
+
+@media screen and (max-width: 525px) {
+    main {
+        & .header_detalhes {
+            margin: 20px 0;
+            & .saldo {
+                & .div_saldo_texto {
+                    padding: 8px 0;
+                }
+                & #saldo_atual {
+                    font-size: 2.5rem;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 400px) {
+    main {
+        & .header_detalhes {
+            margin: 10px 0;
+
+            & .ca {
+                & #ca_nome {
+                    font-size: 1.3rem;
+                }
+            }
+            & .saldo {
+                & .div_saldo_texto {
+                    padding: 9px 0;
+                }
+
+                & #saldo_atual {
+                    font-size: 2rem;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 350px) {
+    main {
+        & .header_detalhes {
+            & .ca {
+                & #ca_nome {
+                    font-size: 1.2rem;
+                }
+            }
+            & .saldo {
+                & #saldo_atual {
+                    font-size: 1.5rem;
+                }
+            }
+        }
+    }
+}
