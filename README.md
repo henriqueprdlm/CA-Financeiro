@@ -53,7 +53,7 @@ C:/xampp/htdocs/cafinanceiro
 No **phpMyAdmin** ou via terminal MySQL:
 
 ```sql
-    CREATE DATABASE CAFinanceiro;
+CREATE DATABASE CAFinanceiro;
 ```
 
 Depois, importe o arquivo `CAFinanceiro.sql` que está no projeto com a estrutura das tabelas.
@@ -78,7 +78,7 @@ Esse arquivo é usado para autenticar as requisições na API do Clerk, especial
 
 Para saber mais sobre a API, [aqui está o link da documentação] (https://documenter.getpostman.com/view/45854706/2sB2x6nsn6).
 
-> **⚠️ Nunca envie o arquivo `.env` para o GitHub!** Adicione `.env` no `.gitignore`.
+> **Nunca envie o arquivo `.env` para o GitHub!** Adicione `.env` no `.gitignore`.
 
 ### 6. Inicie o XAMPP
 
