@@ -15,8 +15,8 @@
     $idLancamento = $data['idLancamento'];
 
     try {
-        // Buscar valor do lançamento para ajustar saldo
-        $stmtOld = $pdo->prepare("SELECT valor, idCategoria FROM lancamentos WHERE idLancamento = ?");
+        // Buscar dados do lançamento antes de excluir
+        $stmtOld = $pdo->prepare("SELECT valor, descricao, data, idCategoria FROM lancamentos WHERE idLancamento = ?");
         $stmtOld->execute([$idLancamento]);
         $lancOld = $stmtOld->fetch(PDO::FETCH_ASSOC);
 
@@ -27,19 +27,40 @@
         }
 
         $valor = $lancOld['valor'];
+        $descricao = $lancOld['descricao'];
+        $dataLancamento = $lancOld['data'];
         $idCategoria = $lancOld['idCategoria'];
 
-        // Excluir lançamento
+        // Excluir o lançamento
         $stmtDel = $pdo->prepare("DELETE FROM lancamentos WHERE idLancamento = ?");
         $stmtDel->execute([$idLancamento]);
 
-        // Ajustar saldo da categoria
+        // Atualizar saldo da categoria
         $stmtSaldo = $pdo->prepare("UPDATE categorias SET saldo = saldo - ? WHERE idCategoria = ?");
         $stmtSaldo->execute([$valor, $idCategoria]);
 
-        echo json_encode(["mensagem" => "Lançamento excluído com sucesso"]);
+        // Buscar nome da categoria para log
+        $stmtCat = $pdo->prepare("SELECT categoria FROM categorias WHERE idCategoria = ?");
+        $stmtCat->execute([$idCategoria]);
+        $categoriaRow = $stmtCat->fetch(PDO::FETCH_ASSOC);
+        $nomeCategoria = $categoriaRow ? $categoriaRow['categoria'] : "ID $idCategoria";
 
+        // Registrar log da exclusão
+        $descricaoLog = "Excluiu lançamento (ID: {$idLancamento}) na categoria {$nomeCategoria} (ID: {$idCategoria}):\n" .
+                        "descrição: {$descricao}, valor: {$valor}, data: {$dataLancamento}";
+
+        registrarLog(
+            $pdo,
+            $user_id,
+            'Lançamento',
+            'Exclusão',
+            $descricaoLog
+        );
+
+        echo json_encode(["mensagem" => "Lançamento excluído com sucesso"]);
     } catch (PDOException $e) {
         http_response_code(500);
         echo json_encode(["erro" => "Erro ao excluir lançamento"]);
+        exit;
     }
+

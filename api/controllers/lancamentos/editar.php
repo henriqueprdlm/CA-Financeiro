@@ -19,6 +19,15 @@
     $dataLancamento = $data['data'];
 
     try {
+        // Buscar todos os dados antigos do lançamento para log
+        $stmtOldFull = $pdo->prepare("SELECT valor, descricao, data FROM lancamentos WHERE idLancamento = ?");
+        $stmtOldFull->execute([$idLancamento]);
+        $lancamentoAntigo = $stmtOldFull->fetch(PDO::FETCH_ASSOC);
+
+        $valorAntigo = $lancamentoAntigo['valor'];
+        $descricaoAntiga = $lancamentoAntigo['descricao'];
+        $dataAntiga = $lancamentoAntigo['data'];
+
         // Buscar o valor antigo para atualizar o saldo corretamente
         $stmtOld = $pdo->prepare("SELECT valor FROM lancamentos WHERE idLancamento = ?");
         $stmtOld->execute([$idLancamento]);
@@ -40,6 +49,27 @@
         $dif = $valorNovo - $valorAntigo;
         $stmtSaldo = $pdo->prepare("UPDATE categorias SET saldo = saldo + ? WHERE idCategoria = ?");
         $stmtSaldo->execute([$dif, $idCategoria]);
+
+        // Buscar nome da categoria
+        $sqlCategoria = "SELECT categoria FROM categorias WHERE idCategoria = ?";
+        $stmtCat = $pdo->prepare($sqlCategoria);
+        $stmtCat->execute([$idCategoria]);
+        $categoriaRow = $stmtCat->fetch(PDO::FETCH_ASSOC);
+        $nomeCategoria = $categoriaRow ? $categoriaRow['categoria'] : "ID $idCategoria";
+
+        // Montar descrição do log com antes e depois
+        $descricaoLog = "Editou lançamento na categoria {$nomeCategoria} (ID: {$idCategoria}):\n" .
+                        "ANTES -> descrição: '{$descricaoAntiga}', valor: {$valorAntigo}, data: {$dataAntiga};\n" .
+                        "DEPOIS -> descrição: '{$descricao}', valor: {$valorNovo}, data: {$dataLancamento}";
+
+        // Registrar log da edição
+        registrarLog(
+            $pdo,
+            $user_id,
+            'Lançamento',
+            'Edição',
+            $descricaoLog
+        );
 
         echo json_encode(["mensagem" => "Lançamento atualizado com sucesso"]);
 

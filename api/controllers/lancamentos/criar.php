@@ -37,9 +37,35 @@
         // Finaliza a transação
         $pdo->commit();
 
-        echo json_encode(["mensagem" => "Lançamento cadastrado com sucesso!"]);
     } catch (PDOException $e) {
-        $pdo->rollBack();
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
         http_response_code(500);
         echo json_encode(["erro" => "Erro ao cadastrar lançamento: " . $e->getMessage()]);
+        exit;
+    }
+
+    try {
+        // Busca o nome da categoria para o log
+        $sqlCategoria = "SELECT categoria FROM categorias WHERE idCategoria = ?";
+        $stmtCat = $pdo->prepare($sqlCategoria);
+        $stmtCat->execute([$idCategoria]);
+        $categoriaRow = $stmtCat->fetch(PDO::FETCH_ASSOC);
+        $nomeCategoria = $categoriaRow ? $categoriaRow['categoria'] : "ID $idCategoria";
+
+        // Registra o log da criação do lançamento
+        registrarLog(
+            $pdo,
+            $user_id,
+            'Lançamento',
+            'Criação',
+            "Criou lançamento '{$descricao}' na categoria: {$nomeCategoria} (ID: {$idCategoria}):\n" . 
+                "valor: {$valor}, data: {$dataLancamento}"
+        );
+
+        echo json_encode(["mensagem" => "Lançamento cadastrado com sucesso!"]);
+    } catch (Exception $e) {
+        error_log("Erro ao registrar log: " . $e->getMessage());
+        echo json_encode(["mensagem" => "Lançamento criado, mas não foi possível registrar o log."]);
     }

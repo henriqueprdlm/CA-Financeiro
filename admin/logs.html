@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Verificação de autenticação do usuário -->
+    <script
+        defer
+        crossorigin="anonymous"
+        data-clerk-publishable-key="pk_test_ZXRoaWNhbC1ibHVlamF5LTY5LmNsZXJrLmFjY291bnRzLmRldiQ"
+        src="https://ethical-bluejay-69.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+        type="text/javascript"
+    ></script>
+    <script src="assets/js/auth.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/logs.css">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="assets/img/favicon/site.webmanifest">
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <title>CA Financeiro - Admin</title>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <img src="assets/img/Logo_Az_Claro.png" alt="Logo do CA Financeiro" style="width: 70px;">
+            <h2>CA Financeiro</h2>
+        </a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="usuarios.html">Usuários</a>
+            <div id="user-button"></div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="logs">
+            <div class="logs_header">
+                <h3>Logs do sistema</h3>
+            </div>
+
+            <div class="filtros_logs">
+                <label>
+                    Entidade:
+                    <select id="filtro_entidade">
+                        <option value="">Todas</option>
+                        <option value="Categoria">Categoria</option>
+                        <option value="Lançamento">Lançamento</option>
+                        <option value="Usuário">Usuário</option>
+                    </select>
+                </label>
+
+                <label>
+                    Ação:
+                    <select id="filtro_acao">
+                        <option value="">Todas</option>
+                        <option value="Criação">Criação</option>
+                        <option value="Edição">Edição</option>
+                        <option value="Exclusão">Exclusão</option>
+                        <option value="Convite">Convite</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="tabela_responsiva">
+                <table class="logs_tabela">
+                    <thead>
+                        <tr>
+                            <th>Data/Hora</th>
+                            <th>Usuário</th>
+                            <th>Email</th>
+                            <th>Entidade</th>
+                            <th>Ação</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela_logs">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© CA Financeiro, 2025</p>
+        <a href="logs.html">Ver logs</a>
+    </footer>
+
+    <script>
+        // Carregar logs
+        document.addEventListener("DOMContentLoaded", async function () {
+            Clerk.load().then(async () => {
+                // Obtem o token do usuário logado
+                const session = await Clerk.session;
+                const token = await session.getToken();
+
+                const res = await fetch("/cafinanceiro/api/logs", {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                const tabela = document.getElementById("tabela_logs");
+                const logs = await res.json();
+
+                function renderizarLogs(filtroEntidade = "", filtroAcao = "") {
+                    tabela.innerHTML = ""; 
+
+                    const filtrados = logs.filter(log =>
+                        (filtroEntidade === "" || log.entidade === filtroEntidade) &&
+                        (filtroAcao === "" || log.acao === filtroAcao)
+                    );
+
+                    filtrados.forEach(log => {
+                        const tr = document.createElement("tr");
+                        tr.innerHTML = `
+                            <td>${log.dataHora}</td>
+                            <td>${log.nomeUsuario}</td>
+                            <td>${log.emailUsuario}</td>
+                            <td>${log.entidade}</td>
+                            <td>${log.acao}</td>
+                            <td>${log.descricao}</td>
+                        `;
+                        tabela.appendChild(tr);
+                    });
+                }
+
+                // Inicial
+                renderizarLogs();
+
+                // Filtros
+                document.getElementById("filtro_entidade").addEventListener("change", () => {
+                    const entidade = document.getElementById("filtro_entidade").value;
+                    const acao = document.getElementById("filtro_acao").value;
+                    renderizarLogs(entidade, acao);
+                });
+
+                document.getElementById("filtro_acao").addEventListener("change", () => {
+                    const entidade = document.getElementById("filtro_entidade").value;
+                    const acao = document.getElementById("filtro_acao").value;
+                    renderizarLogs(entidade, acao);
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>

@@ -28,6 +28,9 @@
         case 'administradores':
             require_once 'routes/administradores.php';
             break;
+        case 'logs':
+            require_once 'routes/logs.php';
+            break;
         default:
             http_response_code(404);
             echo json_encode(["erro" => "Recurso não encontrado"]);

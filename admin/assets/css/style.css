@@ -75,10 +75,20 @@ footer {
     height: 40px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     color: white;
     padding: 20px;
     font-size: 0.8rem;
+
+    & a {
+        text-decoration: none;
+        color: white;
+        transition: color 0.3s ease;
+
+        &:hover {
+            color: var(--azul-claro);
+        }
+    }
 }
 
 

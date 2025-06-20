@@ -76,6 +76,8 @@ CLERK_SECRET_KEY=insira-sua-clerk-secret-key-aqui
 
 Esse arquivo é usado para autenticar as requisições na API do Clerk, especialmente nas rotas protegidas.
 
+Para saber mais sobre a API, [aqui está o link da documentação] (https://documenter.getpostman.com/view/45854706/2sB2x6nsn6).
+
 > **⚠️ Nunca envie o arquivo `.env` para o GitHub!** Adicione `.env` no `.gitignore`.
 
 ### 6. Inicie o XAMPP
@@ -93,6 +95,12 @@ O sistema utiliza **Clerk** para autenticação de administradores:
 - O login e o cadastro são gerenciados externamente pelo Clerk
 - O cadastro é feito via convite por e-mail
 - O JWT (token) obtido pelo Clerk é usado para autenticar chamadas à API
+
+---
+
+## Observação
+
+[Neste link](https://documenter.getpostman.com/view/45854706/2sB2x6nsn6) está a documentação da API.
 
 ---
 

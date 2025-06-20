@@ -80,6 +80,7 @@
 
     <footer>
         <p>© CA Financeiro, 2025</p>
+        <a href="logs.html">Ver logs</a>
     </footer>
 
     <!-- MODALS -->
@@ -117,7 +118,7 @@
             const session = await Clerk.session;
             const token = await session.getToken();
 
-            const res = await fetch("/cafinanceiro/api/administradores/convidar.php", {
+            const res = await fetch("/cafinanceiro/api/administradores", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -128,12 +129,17 @@
 
             const data = await res.json();
 
-            if (data.erro) {
-                alert(data.erro);
-            } else {
-                document.getElementById("modal_aviso_convite").classList.remove("hidden");
+            if (res.ok) {
                 document.querySelector("#modal_aviso_convite .modal-content p").textContent = `Convite enviado para ${email}.`;
+                document.getElementById("modal_aviso_convite").classList.remove("hidden");
                 document.getElementById("form_enviar_convite").reset();
+            } else if (res.status === 409) {
+                document.querySelector("#modal_aviso_convite .modal-content h3").textContent = `Convite duplicado`;
+                document.querySelector("#modal_aviso_convite .modal-content p").textContent = `Um convite já foi enviado para ${email}.`;
+                document.getElementById("modal_aviso_convite").classList.remove("hidden");
+                document.getElementById("form_enviar_convite").reset();
+            } else {
+                alert(data.erro);
             }
         });
 

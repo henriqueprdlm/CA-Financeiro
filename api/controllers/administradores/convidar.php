@@ -38,14 +38,25 @@
     $responseData = json_decode($response, true);
 
     if ($httpCode >= 200 && $httpCode < 300) {
+        registrarLog(
+            $pdo,
+            $user_id,
+            'Usuário',
+            'Convite',
+            "Convite enviado para: $email"
+        );
+
         echo json_encode(["sucesso" => true, "mensagem" => "Convite enviado com sucesso."]);
-    } elseif ($httpCode == 422 && isset($responseData['errors'][0]['code']) && $responseData['errors'][0]['code'] == 'duplicate_record') {
+        exit;
+    } elseif (in_array($httpCode, [400, 422]) && isset($responseData['errors'][0]['code']) && $responseData['errors'][0]['code'] == 'duplicate_record') {
         http_response_code(409);
         echo json_encode(["erro" => "Convite já foi enviado anteriormente para este e-mail."]);
+        exit;
     } else {
         http_response_code($httpCode);
         echo json_encode([
             "erro" => "Erro ao enviar convite",
             "detalhes" => $responseData
         ]);
+        exit;
     }

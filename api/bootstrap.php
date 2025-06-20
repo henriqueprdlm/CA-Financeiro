@@ -6,7 +6,10 @@
     require_once BASE_PATH . '/config/database.php';
 
     // Carrega a autenticação
-    require_once BASE_PATH . '/auth/validarToken.php';
+    require_once BASE_PATH . '/utils/validarToken.php';
+
+    // Carrega o registro de logs
+    require_once BASE_PATH . '/utils/registrarLog.php';
 
     // Faz a autenticação do usuário
     function validarAutenticacao() {

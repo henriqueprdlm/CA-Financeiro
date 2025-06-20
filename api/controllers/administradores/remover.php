@@ -5,7 +5,7 @@
     $user_id = validarAutenticacao();
 
     // Secret key do Clerk
-    $clerkSecretKey = $_ENV['CLERK_SECRET_KEY'];;
+    $clerkSecretKey = $_ENV['CLERK_SECRET_KEY'];
 
     $dados = json_decode(file_get_contents('php://input'), true);
 
@@ -17,24 +17,50 @@
 
     $userClerkId = $dados['user_id'];
 
-    // Excluir usuário do Clerk
+    // Buscar dados do usuário antes de excluir para log
     $curl = curl_init("https://api.clerk.com/v1/users/{$userClerkId}");
     curl_setopt_array($curl, [
-        CURLOPT_CUSTOMREQUEST => "DELETE",
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_HTTPHEADER => [
             "Authorization: Bearer $clerkSecretKey"
         ]
     ]);
+    $resposta = curl_exec($curl);
+    $statusConsulta = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
+    if ($statusConsulta !== 200 || !$resposta) {
+        curl_close($curl);
+        http_response_code(500);
+        echo json_encode(["erro" => "Erro ao buscar dados do usuário antes da exclusão"]);
+        exit;
+    }
+
+    $usuario = json_decode($resposta, true);
+    $nome = ($usuario['first_name'] ?? '') . ' ' . ($usuario['last_name'] ?? '');
+    $email = $usuario['email_addresses'][0]['email_address'] ?? 'não encontrado';
+
+    // Exclui o usuário
+    curl_setopt_array($curl, [
+        CURLOPT_URL => "https://api.clerk.com/v1/users/{$userClerkId}",
+        CURLOPT_CUSTOMREQUEST => "DELETE",
+        CURLOPT_RETURNTRANSFER => true
+    ]);
     curl_exec($curl);
-    $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    $statusDelete = curl_getinfo($curl, CURLINFO_HTTP_CODE);
     curl_close($curl);
 
-    if ($statusCode === 200 || $statusCode === 204) {
+    if ($statusDelete === 200 || $statusDelete === 204) {
+        // Registra o log da exclusão
+        registrarLog(
+            $pdo,
+            $user_id,
+            'Usuário',
+            'Exclusão',
+            "Removeu acesso do usuário: {$nome}, email: {$email}, ID: {$userClerkId}"
+        );
+
         echo json_encode(["mensagem" => "Usuário removido com sucesso"]);
     } else {
         http_response_code(500);
         echo json_encode(["erro" => "Erro ao remover o usuário do Clerk"]);
     }
-?>

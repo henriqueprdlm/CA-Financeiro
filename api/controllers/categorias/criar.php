@@ -24,6 +24,18 @@
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$categoria, $descricao]);
 
+        // Registrar log da criação
+        $descricaoLog = "Criou categoria '{$categoria}':\n" .
+                        "descrição: '{$descricao}'";
+
+        registrarLog(
+            $pdo,
+            $user_id,
+            'Categoria',
+            'Criação',
+            $descricaoLog
+        );
+
         echo json_encode(["mensagem" => "Categoria cadastrada com sucesso!"]);
     } catch (PDOException $e) {
         http_response_code(500);

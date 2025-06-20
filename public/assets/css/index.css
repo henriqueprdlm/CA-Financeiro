@@ -72,21 +72,6 @@ main {
             justify-content: space-between;
             align-items: center;
             width: 100%;
-
-            & button#adicionar_categoria {
-                background-color: rgba(0, 0, 0, 0);
-                border-radius: 50%;
-                border: none;
-                cursor: pointer;
-
-                & img {
-                    transition: transform 0.3s ease;
-
-                    &:hover {
-                        transform: scale(1.2);
-                    }
-                }
-            }
         }
 
         & .categoria {
