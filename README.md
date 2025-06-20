@@ -17,11 +17,12 @@ Permite a visualização e controle de categorias e lançamentos financeiros (re
 
 ## Funcionalidades
 
-- Visualização pública do saldo e lançamentos financeiros por categoria
+- Visualização pública do saldo do CA com categorias e seus saldos individuais, e detalhes de cada categoria com seus lançamentos financeiros (receitas e depesas)
 - Área administrativa com:
   - Cadastro de categorias
-  - Cadastro de lançamentos (receitas e despesas)
+  - Cadastro de lançamentos (receitas e despesas) de uma categoria
   - Gerenciamento de usuários administradores
+  - Visualização de logs de modificações no sistema
 - Autenticação segura via Clerk
 - Interface responsiva
 
