@@ -1,7 +1,7 @@
 # CA Financeiro
 
 Sistema web para gerenciamento financeiro do Centro Acadêmico de Ciência da Computação.
-Permite a visualização e controle de categorias e lançamentos financeiros (receitas e despesas), além da gestão de usuários administradores com autenticação segura via Clerk.
+Permite a visualização e controle de categorias e lançamentos financeiros (receitas e despesas), além da gestão de usuários administradores com autenticação segura via Clerk e registro de logs de todas modificações feitas no sistema.
 
 ---
 
