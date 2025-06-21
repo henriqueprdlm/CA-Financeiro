@@ -32,8 +32,8 @@ CREATE TABLE logs (
   `idUsuario` text NOT NULL,
   `nomeUsuario` text NOT NULL,
   `emailUsuario` text NOT NULL,
-  `entidade` varchar(20) NOT NULL,         -- 'categoria', 'lancamento', 'usuario'
-  `acao` varchar(20) NOT NULL,             -- 'criação', 'edição', 'exclusão'
+  `entidade` varchar(20) NOT NULL,         -- 'Categoria', 'Lançamento', 'Usuário'
+  `acao` varchar(20) NOT NULL,             -- 'Criação', 'Edição', 'Exclusão', 'Convite'
   `descricao` text NOT NULL,               -- Detalhes do que foi feito
   `dataHora` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idLog`)

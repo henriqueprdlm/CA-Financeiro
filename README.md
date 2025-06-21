@@ -60,6 +60,11 @@ CREATE DATABASE CAFinanceiro;
 
 Depois, importe o arquivo `CAFinanceiro.sql` que está no projeto com a estrutura das tabelas.
 
+Diagrama do banco de dados CAFinanceiro:
+
+<img src="diagramaBancoDeDados-CAFinanceiro.png" alt="Diagrama do banco de dados CAFinanceiro" width="500"/>
+
+
 ### 4. Instale as dependências
 
 Para instalar as dependências do projeto via Composer, execute:
@@ -100,9 +105,10 @@ O sistema utiliza **Clerk** para autenticação de administradores:
 
 ---
 
-## Observação
+## Links úteis
 
-[Neste link](https://documenter.getpostman.com/view/45854706/2sB2x6nsn6) está a documentação da API.
+[Documentação da API](https://documenter.getpostman.com/view/45854706/2sB2x6nsn6)
+[Vídeo de demonstração do sistema](https://youtu.be/ZH128sf9Fro)
 
 ---
 
