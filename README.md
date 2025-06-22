@@ -105,7 +105,9 @@ O sistema utiliza **Clerk** para autenticação de administradores:
 
 ---
 
-## Links úteis
+## Utilidades
+
+O projeto do sistema está neste repositório (`Projeto-CAFinanceiro.pdf`).
 
 [Documentação da API](https://documenter.getpostman.com/view/45854706/2sB2x6nsn6)
 
